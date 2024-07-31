@@ -19,7 +19,7 @@ export const sidebar: DefaultTheme.Sidebar = {
       ]
     },
     {
-      text: '数据库',
+      text: '数据库核心技术',
       collapsed: true,
       items: [
 
@@ -33,7 +33,28 @@ export const sidebar: DefaultTheme.Sidebar = {
       ]
     },
     {
-      text: 'SSM',
+      text: 'WEB 技术规范',
+      collapsed: true,
+      items: [
+
+      ]
+    },
+    {
+      text: '后端工程化',
+      collapsed: true,
+      items: [
+
+      ]
+    },
+    {
+      text: '前端工程化',
+      collapsed: true,
+      items: [
+
+      ]
+    },
+    {
+      text: '分布式核心',
       collapsed: true,
       items: [
 
@@ -41,6 +62,13 @@ export const sidebar: DefaultTheme.Sidebar = {
     },
     {
       text: '微服务',
+      collapsed: true,
+      items: [
+
+      ]
+    },
+    {
+      text: '项目实战',
       collapsed: true,
       items: [
 
