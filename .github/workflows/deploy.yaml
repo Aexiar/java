@@ -1,0 +1,31 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "拉取代码"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: "设置node.js的版本"
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: "安装依赖"
+        run: |
+          npm install
+      - name: "打包"
+        run: |
+          npm run docs:build
+      - name: "部署"
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/.vitepress/dist
