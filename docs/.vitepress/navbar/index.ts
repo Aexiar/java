@@ -14,4 +14,5 @@ export const nav: DefaultTheme.NavItem[] = [
     ]
   },
   { text: '开源软件', link: 'https://aexiar.github.io/open-software/notes/' },
+  { text: '关于我', link: '/notes/about/' },
 ]
