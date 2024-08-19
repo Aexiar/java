@@ -54,7 +54,10 @@ hero:
       link: "https://aexiar.github.io/go/notes/"  
     - theme: alt
       text: "Python"
-      link: "https://aexiar.github.io/python/notes/"          
+      link: "https://aexiar.github.io/python/notes/" 
+    - theme: alt
+      text: "数据库"
+      link: "https://aexiar.github.io/db/notes/"                 
     - theme: alt
       text: "开源软件"
       link: "https://aexiar.github.io/open-software/notes/"              
