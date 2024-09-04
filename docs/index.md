@@ -30,37 +30,46 @@ hero:
   actions:
     - theme: brand
       text: "首页"
-      link: "https://aexiar.github.io"  
+      link: "/"  
     - theme: alt
       text: "计组6件套"
-      link: "https://aexiar.github.io/coa6/notes/"      
+      link: "/coa6/notes/"
+      target: '_blank'      
     - theme: alt
       text: "c/c++"
-      link: "https://aexiar.github.io/c/notes/"       
+      link: "/c/notes/"
+      target: '_blank'       
     - theme: alt
       text: "前端"
-      link: "https://aexiar.github.io/web-design/notes/"
+      link: "/web-design/notes/"
+      target: '_blank'
     - theme: alt
       text: "Java"
       link: "/notes/"
     - theme: alt
       text: "大数据"
-      link: "https://aexiar.github.io/big-data/notes/"
+      link: "/big-data/notes/"
+      target: '_blank'
     - theme: alt
       text: "云原生"
-      link: "https://aexiar.github.io/linux/notes/"
+      link: "/linux/notes/"
+      target: '_blank'
     - theme: alt
       text: "Go"
-      link: "https://aexiar.github.io/go/notes/"  
+      link: "/go/notes/"
+      target: '_blank'  
     - theme: alt
       text: "Python"
-      link: "https://aexiar.github.io/python/notes/" 
+      link: "/python/notes/"
+      target: '_blank' 
     - theme: alt
       text: "数据库"
-      link: "https://aexiar.github.io/db/notes/"                 
+      link: "/db/notes/"
+      target: '_blank'                 
     - theme: alt
       text: "开源软件"
-      link: "https://aexiar.github.io/open-software/notes/"              
+      link: "/open-software/notes/" 
+      target: '_blank'             
 
 # 按钮下方的描述
 features:
