@@ -33,6 +33,7 @@ export default defineConfig({
     if (pageData.frontmatter.hero && pageData.frontmatter.hero.actions) {
       pageData.frontmatter.hero.actions.forEach(action => {
         if (action.link && action.link.startsWith('/')) {
+          console.log('replace link:', action.link)
           // 如果链接以 '/' 开头，表示它是一个绝对路径，需要在这里调整
           if (!action.link.startsWith('/java/')) {
             action.link = action.link // 保持原有绝对路径
