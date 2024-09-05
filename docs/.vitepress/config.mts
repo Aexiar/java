@@ -28,6 +28,20 @@ export default defineConfig({
     ['meta', { name: "keywords", content: "许大仙,许大仙的博客" }],
   ],
   base: VITE_BASE_URL,
+  transformPageData(pageData) {
+    // 查找所有的链接并替换为绝对路径，避免拼接 base
+    if (pageData.frontmatter.hero && pageData.frontmatter.hero.actions) {
+      pageData.frontmatter.hero.actions.forEach(action => {
+        if (action.link && action.link.startsWith('/')) {
+          // 如果链接以 '/' 开头，表示它是一个绝对路径，需要在这里调整
+          if (!action.link.startsWith('/java/')) {
+            action.link = action.link // 保持原有绝对路径
+          }
+        }
+      })
+    }
+    return pageData
+  },
   lastUpdated: true, // 上次更新
   vite: {
     build: {
