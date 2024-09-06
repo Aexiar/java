@@ -28,23 +28,13 @@ export default defineConfig({
     ['meta', { name: "keywords", content: "许大仙,许大仙的博客" }],
   ],
   base: VITE_BASE_URL,
-  transformHtml: (code, id, { pageData }) => {
-    // 使用正则表达式匹配带有 target="_blank" 的链接并移除 base 前缀
-    const regex = new RegExp(`href="${VITE_BASE_URL}([^"]*)" target="_blank"`, 'g')
-
-    // 将带有 target="_blank" 的链接中的 base 前缀去掉
-    code = code.replace(regex, (match, p1) => {
-      return `href="/${p1}" target="_blank"`
-    })
-    console.log('transformHtml', code)
-    return
-  },
   lastUpdated: true, // 上次更新
   vite: {
     build: {
       chunkSizeWarningLimit: 1600
     },
-    plugins: [],
+    plugins: [
+    ],
     server: {
       port: 18088
     }
