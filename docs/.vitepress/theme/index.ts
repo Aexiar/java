@@ -25,9 +25,9 @@ export default {
     }
     // 使用 Vue 的 onMounted 生命周期钩子
     onMounted(() => {
-      router.onAfterRouteChanged = () => {
+      router.onBeforeRouteChange = () => {
         const navbarTitle = document.querySelector('.VPNavBarTitle')
-
+        debugger
         if (navbarTitle) {
           // 移除现有的事件监听器（避免重复绑定）
           navbarTitle.removeEventListener('click', handleClick)
@@ -35,6 +35,8 @@ export default {
           // 添加点击事件监听器
           navbarTitle.addEventListener('click', handleClick)
         }
+
+        return true // 继续导航
       }
     })
   },
