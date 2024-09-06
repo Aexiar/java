@@ -19,19 +19,24 @@ export default {
     app.component('ArticleMetadata', ArticleMetadata)
     app.component('confetti', confetti)
 
-    router.onAfterRouteChanged = (to) => {
-      // 获取导航栏标题元素
-      const navbarTitle = document.querySelector('.VPNavBarTitle')
+    // 定义事件处理函数
+    function handleClick() {
+      window.location.reload()
+    }
+    // 使用 Vue 的 onMounted 生命周期钩子
+    onMounted(() => {
+      router.onAfterRouteChanged = () => {
+        const navbarTitle = document.querySelector('.VPNavBarTitle')
 
-      // 如果找到了导航栏标题
-      if (navbarTitle) {
-        // 监听点击事件
-        navbarTitle.addEventListener('click', () => {
-          // 刷新页面
-          window.location.reload()
-        })
+        if (navbarTitle) {
+          // 移除现有的事件监听器（避免重复绑定）
+          navbarTitle.removeEventListener('click', handleClick)
+
+          // 添加点击事件监听器
+          navbarTitle.addEventListener('click', handleClick)
+        }
       }
-    };
+    })
   },
   setup() {
     // Get frontmatter and route
