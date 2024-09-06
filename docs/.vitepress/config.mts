@@ -28,14 +28,6 @@ export default defineConfig({
     ['meta', { name: "keywords", content: "许大仙,许大仙的博客" }],
   ],
   base: VITE_BASE_URL,
-  // transformHtml: (code) => {
-  //   // 动态匹配带有 target="_blank" 的链接并移除 base 前缀
-  //   const regex = new RegExp(`href="${VITE_BASE_URL.replace(/\//g, '\\/')}(.*?)" target="_blank"`, 'g')
-  //   return code.replace(regex, (match, p1) => {
-  //     // 将链接中的 base 前缀去掉
-  //     return `href="/${p1}" target="_blank"`
-  //   })
-  // },
   transformHtml: (code) => {
     // 匹配所有 href 链接，并检查其中是否有 target="_blank"
     return code.replace(/href="([^"]*)"(.*?)>/g, (match, href, rest) => {

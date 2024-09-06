@@ -4,11 +4,10 @@ import ArticleMetadata from "./components/ArticleMetadata.vue"
 import mediumZoom from 'medium-zoom'
 import { onMounted, watch, nextTick, h } from 'vue'
 import giscusTalk from 'vitepress-plugin-comment-with-giscus'
-import { useData, useRoute } from 'vitepress'
+import { useData, useRoute, useRouter } from 'vitepress'
 import confetti from "./components/confetti.vue"
 import backTop from "./components/backTop.vue"
 import './style/index.css'
-
 export default {
   extends: DefaultTheme,
   Layout() {
@@ -16,9 +15,23 @@ export default {
       'doc-footer-before': () => h(backTop), // 使用doc-footer-before插槽
     })
   },
-  enhanceApp({ app }) {
+  enhanceApp({ app, router }) {
     app.component('ArticleMetadata', ArticleMetadata)
     app.component('confetti', confetti)
+
+    router.onAfterRouteChanged = (to) => {
+      // 获取导航栏标题元素
+      const navbarTitle = document.querySelector('.VPNavBarTitle')
+
+      // 如果找到了导航栏标题
+      if (navbarTitle) {
+        // 监听点击事件
+        navbarTitle.addEventListener('click', () => {
+          // 刷新页面
+          window.location.reload()
+        })
+      }
+    };
   },
   setup() {
     // Get frontmatter and route
