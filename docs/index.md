@@ -33,42 +33,42 @@ hero:
       link: "/"  
     - theme: alt
       text: "计组6件套"
-      link: "./coa6/notes/"
+      link: "/coa6/notes/"
       target: '_blank'      
     - theme: alt
       text: "c/c++"
-      link: "./c/notes/"
+      link: "/c/notes/"
       target: '_blank'       
     - theme: alt
       text: "前端"
-      link: "./web-design/notes/"
+      link: "/web-design/notes/"
       target: '_blank'
     - theme: alt
       text: "Java"
       link: "/notes/"
     - theme: alt
       text: "大数据"
-      link: "./big-data/notes/"
+      link: "/big-data/notes/"
       target: '_blank'
     - theme: alt
       text: "云原生"
-      link: "./linux/notes/"
+      link: "/linux/notes/"
       target: '_blank'
     - theme: alt
       text: "Go"
-      link: "./go/notes/"
+      link: "/go/notes/"
       target: '_blank'  
     - theme: alt
       text: "Python"
-      link: "./python/notes/"
+      link: "/python/notes/"
       target: '_blank' 
     - theme: alt
       text: "数据库"
-      link: "./db/notes/"
+      link: "/db/notes/"
       target: '_blank'                 
     - theme: alt
       text: "开源软件"
-      link: "./open-software/notes/" 
+      link: "/open-software/notes/" 
       target: '_blank'             
 
 # 按钮下方的描述
