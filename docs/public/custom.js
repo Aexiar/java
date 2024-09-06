@@ -5,7 +5,9 @@ document.addEventListener('DOMContentLoaded', function () {
   debugger
   if (navBarTitle) {
     // 为 .VPNavBarTitle 元素添加点击事件监听器
-    navBarTitle.addEventListener('click', function () {
+    navBarTitle.addEventListener('click', function (event) {
+      // 阻止默认的路由切换行为
+      event.preventDefault()
       // 刷新页面
       location.reload()
     })
