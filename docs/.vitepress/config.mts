@@ -28,20 +28,16 @@ export default defineConfig({
     ['meta', { name: "keywords", content: "许大仙,许大仙的博客" }],
   ],
   base: VITE_BASE_URL,
-  transformPageData(pageData) {
-    // 查找所有的链接并替换为绝对路径，避免拼接 base
-    if (pageData.frontmatter.hero && pageData.frontmatter.hero.actions) {
-      pageData.frontmatter.hero.actions.forEach(action => {
-        if (action.link && action.link.startsWith('/')) {
-          console.log('replace link:', action.link)
-          if (action.link !== '/notes/') {
-            action.link = action.link // 保持原有绝对路径
-          }
-          console.log('replace link result:', action.link)
-        }
-      })
-    }
-    return pageData
+  transformHtml: (code, id, { pageData }) => {
+    // 使用正则表达式匹配带有 target="_blank" 的链接并移除 base 前缀
+    const regex = new RegExp(`href="${VITE_BASE_URL}([^"]*)" target="_blank"`, 'g')
+
+    // 将带有 target="_blank" 的链接中的 base 前缀去掉
+    code = code.replace(regex, (match, p1) => {
+      return `href="/${p1}" target="_blank"`
+    })
+    console.log('transformHtml', code)
+    return
   },
   lastUpdated: true, // 上次更新
   vite: {
