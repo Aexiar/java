@@ -6,7 +6,7 @@
   "scripts": {
     "docs:dev": "vitepress dev docs --mode development",
     "docs:build": "vitepress build docs --mode production",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs --mode production"
   },
   "keywords": [],
   "author": "",

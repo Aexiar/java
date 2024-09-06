@@ -23,22 +23,23 @@ export default {
     function handleClick() {
       window.location.reload()
     }
-    // 使用 Vue 的 onMounted 生命周期钩子
-    onMounted(() => {
-      router.onBeforeRouteChange = () => {
-        const navbarTitle = document.querySelector('.VPNavBarTitle')
-        debugger
-        if (navbarTitle) {
-          // 移除现有的事件监听器（避免重复绑定）
-          navbarTitle.removeEventListener('click', handleClick)
+    // if (typeof window !== 'undefined') {
+    //   // 使用 Vue 的 onMounted 生命周期钩子
+    //   router.onBeforeRouteChange = () => {
+    //     const navbarTitle = document.querySelector('.VPNavBarTitle')
+    //     debugger
+    //     if (navbarTitle) {
+    //       // 移除现有的事件监听器（避免重复绑定）
+    //       navbarTitle.removeEventListener('click', handleClick)
 
-          // 添加点击事件监听器
-          navbarTitle.addEventListener('click', handleClick)
-        }
+    //       // 添加点击事件监听器
+    //       navbarTitle.addEventListener('click', handleClick)
+    //     }
 
-        return true // 继续导航
-      }
-    })
+    //     return true // 继续导航
+    //   }
+    // }
+
   },
   setup() {
     // Get frontmatter and route
