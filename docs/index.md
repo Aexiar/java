@@ -19,9 +19,10 @@ head:
     - name: keywords
       content: 许大仙,许大仙的博客
 
-hero:
-  name: "许大仙同学"
-  text: ""
+# 网站的居中文案
+hero: 
+  name: "计算机知识"
+  text: "大、全、细"
   tagline: "『这个世纪疯狂，没人性，腐败；你却一直清醒，温柔，一尘不染。』"
   image:  # text 和 tagline 区域旁的图片
     src: /logo.svg
@@ -86,5 +87,6 @@ features:
 
 
 <confetti />
+<HomeUnderline />
 
 

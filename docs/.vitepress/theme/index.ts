@@ -4,10 +4,12 @@ import ArticleMetadata from "./components/ArticleMetadata.vue"
 import mediumZoom from 'medium-zoom'
 import { onMounted, watch, nextTick, h } from 'vue'
 import giscusTalk from 'vitepress-plugin-comment-with-giscus'
-import { useData, useRoute, useRouter } from 'vitepress'
+import { useData, useRoute } from 'vitepress'
 import confetti from "./components/confetti.vue"
 import backTop from "./components/backTop.vue"
+import HomeUnderline from "./components/HomeUnderline.vue"
 import './style/index.css'
+
 export default {
   extends: DefaultTheme,
   Layout() {
@@ -15,31 +17,10 @@ export default {
       'doc-footer-before': () => h(backTop), // 使用doc-footer-before插槽
     })
   },
-  enhanceApp({ app, router }) {
+  enhanceApp({ app }) {
     app.component('ArticleMetadata', ArticleMetadata)
     app.component('confetti', confetti)
-
-    // 定义事件处理函数
-    function handleClick() {
-      window.location.reload()
-    }
-    // if (typeof window !== 'undefined') {
-    //   // 使用 Vue 的 onMounted 生命周期钩子
-    //   router.onBeforeRouteChange = () => {
-    //     const navbarTitle = document.querySelector('.VPNavBarTitle')
-    //     debugger
-    //     if (navbarTitle) {
-    //       // 移除现有的事件监听器（避免重复绑定）
-    //       navbarTitle.removeEventListener('click', handleClick)
-
-    //       // 添加点击事件监听器
-    //       navbarTitle.addEventListener('click', handleClick)
-    //     }
-
-    //     return true // 继续导航
-    //   }
-    // }
-
+    app.component('HomeUnderline', HomeUnderline)
   },
   setup() {
     // Get frontmatter and route
