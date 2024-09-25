@@ -18,7 +18,6 @@ export default defineConfig({
     ['link', { rel: "shortcut icon", href: `${VITE_BASE_URL}/logo.svg` }],
     // 网站 favicon.ico 图标
     ['link', { rel: "icon", href: `${VITE_BASE_URL}/logo.svg`, type: "image/svg+xml" }],
-    ['script', { src: `${VITE_BASE_URL}/custom.js` }],
     // 引入 Google Fonts
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],

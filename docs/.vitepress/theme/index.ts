@@ -32,6 +32,16 @@ export default {
     }
     onMounted(() => {
       initZoom()
+
+      // 添加 .VPNavBarTitle 的点击事件
+      const navBarTitle = document.querySelector('.VPNavBarTitle')
+      if (navBarTitle) {
+        navBarTitle.addEventListener('click', () => {
+          // 刷新页面
+          location.reload()
+        })
+      }
+
       // 禁止 ios 缩放屏幕
       document.addEventListener('gesturestart', function (event) {
         event.preventDefault()
