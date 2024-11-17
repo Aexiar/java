@@ -1,0 +1,29 @@
+{
+  "name": "aurorxa",
+  "version": "1.5.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "docs:dev": "vitepress dev docs --mode development",
+    "docs:build": "vitepress build docs --mode production",
+    "docs:preview": "vitepress preview docs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "canvas-confetti": "^1.9.3",
+    "markdown-it-mathjax3": "^4.3.2",
+    "vitepress": "^1.5.0"
+  },
+  "dependencies": {
+    "dayjs": "1.11.13",
+    "dotenv": "^16.4.5",
+    "font-pingfang-sc-font-weight-improved": "^1.0.7",
+    "markdown-it": "^14.1.0",
+    "markdown-it-container": "^4.0.0",
+    "medium-zoom": "^1.1.0",
+    "vitepress-plugin-comment-with-giscus": "^1.1.15"
+  }
+}
