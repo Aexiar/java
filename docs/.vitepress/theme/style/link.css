@@ -158,3 +158,31 @@
     top: -2px;
     margin-right: 4px;
 }
+
+/* cppreference */
+.vp-doc a[href*="cppreference"]:before {
+    content: '';
+    background-image: url(/svg/cpp.svg);
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    background-size: cover;
+    top: -2px;
+    margin-right: 4px;
+}
+
+/* docker */
+.vp-doc a[href*="docker"]:before {
+    content: '';
+    background-image: url(/svg/docker.svg);
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    background-size: cover;
+    top: -2px;
+    margin-right: 4px;
+}
