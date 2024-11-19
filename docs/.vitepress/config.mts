@@ -2,6 +2,7 @@ import { defineConfig } from 'vitepress'
 import { nav } from './navbar'
 import sidebar from './sidebar'
 import dayjs from 'dayjs'
+import timeline from "vitepress-markdown-timeline"
 
 import { loadEnv } from 'vite'
 const mode = process.env.NODE_ENV || 'development'
@@ -85,6 +86,7 @@ export default defineConfig({
           return defaultContent
         }
       })
+      md.use(timeline)
     }
   },
   themeConfig: { // 主题设置

@@ -6,18 +6,16 @@ import { onMounted, watch, nextTick, h } from 'vue'
 import giscusTalk from 'vitepress-plugin-comment-with-giscus'
 import { useData, useRoute, inBrowser } from 'vitepress'
 import Confetti from "./components/Confetti.vue"
-import BackTop from "./components/BackTop.vue"
+// import BackTop from "./components/BackTop.vue"
+import SwitchLayout from './components/SwitchLayout.vue'
 import HomeUnderline from "./components/HomeUnderline.vue"
+import "vitepress-markdown-timeline/dist/theme/index.css"
 import './style/index.css'
 
 export default {
   extends: DefaultTheme,
   Layout() {
-    return h(DefaultTheme.Layout, null, {
-      'doc-footer-before': () => h(BackTop), // 使用doc-footer-before插槽
-      // 'layout-top': () => h(notice), // 使用layout-top插槽
-      'doc-before': () => h(ArticleMetadata), // 使用doc-before插槽
-    })
+    return h(SwitchLayout)
   },
   enhanceApp({ app, router }) {
     app.component('ArticleMetadata', ArticleMetadata)
