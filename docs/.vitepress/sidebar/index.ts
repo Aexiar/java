@@ -10,6 +10,13 @@ export const sidebar: DefaultTheme.Sidebar = {
       ]
     },
     {
+      text: 'Java 语言进阶',
+      collapsed: true,
+      items: [
+        { text: '虚拟地址空间', link: `/notes/02_java-leap/01_${commonDirectoryName}/` },
+      ]
+    },
+    {
       text: 'Java 语言高级',
       collapsed: true,
       items: [
