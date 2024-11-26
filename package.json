@@ -14,14 +14,14 @@
   "type": "module",
   "devDependencies": {
     "@types/dom-view-transitions": "^1.0.5",
-    "@types/node": "^22.9.0",
+    "@types/node": "^22.9.4",
     "canvas-confetti": "^1.9.3",
     "markdown-it-mathjax3": "^4.3.2",
     "vitepress": "^1.5.0"
   },
   "dependencies": {
     "@fontsource/roboto": "^5.1.0",
-    "@theojs/lumen": "^4.1.0",
+    "@theojs/lumen": "^5.0.0",
     "busuanzi.pure.js": "^1.0.3",
     "dayjs": "1.11.13",
     "dotenv": "^16.4.5",
@@ -29,6 +29,6 @@
     "medium-zoom": "^1.1.0",
     "vitepress-markdown-timeline": "^1.2.1",
     "vitepress-plugin-comment-with-giscus": "^1.1.15",
-    "vue-router": "^4.4.5"
+    "vue-router": "^4.5.0"
   }
 }
