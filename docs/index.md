@@ -29,45 +29,45 @@ hero:
   # 按钮相关
   actions:
     - theme: brand
-      text: "首页"
+      text: "🏠首页"
       link: "/"  
     - theme: alt
-      text: "计组6件套"
+      text: "🧑‍💻计组6件套"
       link: "/coa6/notes/"
       target: '_blank'      
     - theme: alt
-      text: "c/c++"
+      text: "⚙️c/c++"
       link: "/c/notes/"
       target: '_blank'       
     - theme: alt
-      text: "前端"
+      text: "🎨前端"
       link: "/web-design/notes/"
       target: '_blank'
     - theme: alt
-      text: "Java"
+      text: "☕Java"
       link: "/notes/"
     - theme: alt
-      text: "大数据"
+      text: "📈大数据"
       link: "/big-data/notes/"
       target: '_blank'
     - theme: alt
-      text: "云原生"
+      text: "🌱云原生"
       link: "/linux/notes/"
       target: '_blank'
     - theme: alt
-      text: "Go"
+      text: "🐹Go"
       link: "/go/notes/"
       target: '_blank'  
     - theme: alt
-      text: "Python"
+      text: "🐍Python"
       link: "/python/notes/"
       target: '_blank' 
     - theme: alt
-      text: "数据库"
+      text: "🛢️数据库"
       link: "/db/notes/"
       target: '_blank'                 
     - theme: alt
-      text: "开源软件"
+      text: "🤝开源软件"
       link: "/open-software/notes/" 
       target: '_blank'             
 
