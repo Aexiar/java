@@ -7,6 +7,7 @@ export const sidebar: DefaultTheme.Sidebar = {
       collapsed: true,
       items: [
         { text: '计算机软件常识科普', link: `/notes/01_java-basic/01_${commonDirectoryName}/` },
+        { text: 'Java 入门', link: `/notes/01_java-basic/02_${commonDirectoryName}/` },
       ]
     },
     {
