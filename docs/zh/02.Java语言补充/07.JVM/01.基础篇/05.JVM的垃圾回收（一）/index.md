@@ -1736,41 +1736,156 @@ public class Test {
 
 #### 3.4.4.1 概述
 
-* 虚引用（幽灵引用/幻影引用），无法通过虚引用获取对象，即：get() 方法永远返回 null 。
-* 虚引用只有在`对象即将被回收`时，才会被放入 `ReferenceQueue`，用于通知程序：“这个对象马上就要被回收了”，即：必须与 `ReferenceQueue` 一起使用。
-* `虚引用`唯一的应用场景：当对象被 GC 回收的时候可以接收到对应的通知。
+* `PhantomReference`（虚引用/幽灵引用/幻引用）是 Java 中最弱的一种引用类型，它的使用流程与 `SoftReference` 和 `WeakReference` 有显著不同。
+* `虚引用`不能通过 `get()` 获取对象，且只有在对象被 `彻底回收后` 才会入队，因此它的使用有特定的模式。
 
-> [!CAUTION]
+> [!NOTE]
 >
-> 在常规开发中，几乎很少使用到！！！
+> * ① 在常规的开发中，较少使用到虚引用。
+> * ② 应用场景：精确地知道一个对象何时被从内存中彻底清除，用于执行资源清理（堆外内存、文件句柄等），替代不安全的 `finalize()` 方法。
+
+#### 3.4.4.2 类的生命周期 VS 对象的生命周期
+
+* `类的生命周期`指的是一个类从被 JVM 加载到卸载的整个过程。这个过程由 JVM 控制，主要包括以下几个阶段：
+
+> [!NOTE]
+>
+> * :one:`类的生命周期`是“模板”的生命周期，决定了类如何被加载和初始化。
+> * :two: `类的生命周期`是全局唯一的，一个类在 JVM 中只会被加载、链接、初始化一次。
+
+| 类的生命周期主要阶段       | 描述                                                         |
+| :------------------------- | :----------------------------------------------------------- |
+| ① 加载（Loading）          | 类的字节码或定义被读入内存，但还未进行初始化。 <br/>这通常发生在程序首次引用该类时。 |
+| ② 链接（Linking）          | 验证（Verification）、准备（Preparation）和解析（Resolution）。 <br>包括验证类的结构完整性、为静态变量分配内存空间，以及解析类中的符号引用。 |
+| ③ 初始化（Initialization） | 执行类的静态初始化代码，如：静态变量赋值、静态代码块等。 <br>这个阶段确保类在首次使用前处于正确状态。 |
+| ④ 使用（Using）            | 类被实例化创建对象，或者直接访问静态成员。<br> 这是类发挥实际作用的阶段。 |
+| ⑤ 卸载（Unloading）        | 当类不再被引用且满足特定条件时，垃圾回收器可能会卸载该类，释放相关内存。 |
+
+* `对象的生命周期`是指一个对象从创建到被垃圾回收的全过程，如下所示：
+
+> [!NOTE]
+>
+> * :one:`对象的生命周期`是“实例”的生命周期，决定了数据的存在时间和内存管理。
+> * :two: 对象的生命周期，如下所示：
+>
+> ![](./assets/40.svg)
+
+| 对象的生命周期主要阶段           | 描述                                                         |
+| :------------------------------- | :----------------------------------------------------------- |
+| ① 创建（Creation）               | 使用 `new` 关键字调用构造方法创建对象。<br/>内存分配在堆（Heap）上。 |
+| ② 初始化（Initialized）          | 构造函数执行初始化逻辑。                                     |
+| ③ 使用（Usage）                  | 对象被程序使用，调用其方法、访问其字段等。                   |
+| ④ 不可达（UnReachable）          | 当没有任何引用指向该对象时，对象变为“不可达”（断开强引用），如：`obj = null;` 或超出作用域。 |
+| ⑤ 垃圾回收（Garbage Collection） | JVM 的垃圾回收器在适当的时候回收对象占用的内存。<br/>在回收前，如果类重写了 `finalize()` 方法，可能会被调用（但不推荐依赖此方法）。 |
+
+* `类的生命周期` VS `对象的生命周期`：
+
+| 特性       | 类的生命周期                 | 对象的生命周期           |
+| ---------- | ---------------------------- | ------------------------ |
+| 发生时机   | JVM 加载类时                 | 使用`new`创建对象时      |
+| 触发次数   | 每个类只加载一次             | 可创建多个实例           |
+| 内存区域   | 方法区 / 元空间（Metaspace） | 堆（Heap）               |
+| 初始化内容 | 静态变量、静态代码块         | 实例变量、构造函数       |
+| 控制者     | JVM 类加载机制               | 程序员（通过`new`）和 GC |
+| 结束条件   | 类加载器被回收（少见）       | 无引用后被 GC 回收       |
+| 唯一性     | 一个类只有一个`Class`对象    | 一个类可有多个对象实例   |
+
+#### 3.4.4.3 四种引用的对比
+
+* Java 中四种引用之间的对比，如下所示：
+
+| 特性                   | 强引用             | 软引用           | 弱引用         | 虚引用                  |
+| ---------------------- | ------------------ | ---------------- | -------------- | ----------------------- |
+| 是否阻止 GC 回收       | 是                 | 内存充足时不回收 | 否             | 否                      |
+| 回收时机               | 永不（除非无引用） | 内存不足时       | GC 运行时      | 随时，但需入队          |
+| 是否可获取对象         | 是                 | 是               | 是（未回收前） | 否（`get()`返回`null`） |
+| 是否需`ReferenceQueue` | 否                 | 可选             | 可选           | 必须                    |
+| 典型用途               | 普通对象引用       | 内存敏感缓存     | 避免内存泄漏   | 跟踪对象回收、资源清理  |
+
+#### 3.4.4.4 虚引用的使用方式
+
+* 虚引用的执行过程，如下所示：
+  * 1️⃣ 创建虚引用，即：将对象（目标对象）使用虚引用包装起来（虚引用必须配合引用队列（ReferenceQueue）使用，且确保没有强引用持有目标对象）。
+  * 2️⃣ 对象变为不可达：当目标对象只被虚引用持有时，该对象在逻辑上已经不可达，可以被垃圾回收。
+  * 3️⃣ 对象被标记为可回收：GC 发现对象只被虚引用持有时，会将该对象标记为`可回收`状态，但不会立即回收 。
+  * 4️⃣ 虚引用入队“在对象被实际回收之前，JVM 会将对应的虚引用加入到引用队列中，这是虚引用的核心作用。
+  * 5️⃣ 执行清理操作：程序可以通过监听引用队列来检测对象即将被回收，执行必要的清理操作。
+  * 6️⃣ 对象被实际回收：清理操作完成后，目标对象才会被真正从内存中回收。
+
+* 其流程图，如下所示：
+
+```mermaid
+flowchart TD
+    A[开始] --> B["1️⃣ 创建虚引用<br/>new PhantomReference&lt;对象类型&gt;(对象, referenceQueue)<br/>确保没有强引用持有"]
+    B --> C["2️⃣ 对象变为不可达<br/>只被虚引用持有"]
+    C --> D["3️⃣ GC 标记对象为可回收<br/>但不立即回收"]
+    D --> E["4️⃣ 虚引用入队<br/>PhantomReference 被加入 ReferenceQueue"]
+    E --> F["5️⃣ 程序监听引用队列<br/>referenceQueue.remove()"]
+    F --> G{"检测到虚引用？"}
+    G -->|否| H["继续监听队列"]
+    H --> F
+    G -->|是| I["执行清理操作<br/>performCleanup()"]
+    I --> J["6️⃣ 对象被实际回收<br/>从内存中移除"]
+    J --> K[✅ 清理完成]
+    K --> L[结束]
+    
+    style A fill:#e1f5fe,font-size:12px,padding:2px
+    style B fill:#f3e5f5,font-size:12px,padding:2px
+    style C fill:#f3e5f5,font-size:12px,padding:2px
+    style D fill:#fff3e0,font-size:12px,padding:2px
+    style E fill:#ffebee,font-size:12px,padding:2px
+    style F fill:#fff3e0,font-size:12px,padding:2px
+    style G fill:#fff3e0,font-size:12px,padding:2px
+    style I fill:#e8f5e8,font-size:12px,padding:2px
+    style J fill:#ffebee,font-size:12px,padding:2px
+    style K fill:#e8f5e8,font-size:12px,padding:2px
+    style L fill:#e8f5e8,font-size:12px,padding:2px
+```
 
 
 
+* 示例：
 
+::: code-group
 
+```java [Test.java]
+package com.github;
 
+import java.lang.ref.PhantomReference;
+import java.lang.ref.Reference;
+import java.lang.ref.ReferenceQueue;
 
+public class Test {
 
+    public static void main(String[] args) throws InterruptedException {
+        // 创建 100MB 的字节数组
+        byte[] bytes = new byte[1024 * 1024 * 100];
+        // 创建引用队列
+        ReferenceQueue<byte[]> queue = new ReferenceQueue<>();
+        // 创建虚引用并关联对象和引用队列
+        PhantomReference<byte[]> phantomRef = new PhantomReference<>(bytes, queue);
+        // 解除强引用，即：只剩下虚引用关联对象，可以被 GC 回收
+        bytes = null;
+        // 调用 gc 回收
+        System.gc();
 
+        // 实际开发中，使用监控线程一直阻塞，直到虚引用对象被回收
+        Reference<? extends byte[]> ref ;
+        // 需要使用 remove 方法
+        // 因为 remove 会阻塞，而 poll 不会阻塞，会导致 ref 是 null，跳出循环
+        while ((ref = queue.remove()) != null) {
+            System.out.println("虚引用对象被回收");
+            // 清理自身
+            ref.clear();
+        }
 
+    }
+}
+```
 
+```md:img[cmd 控制台]
+![](./assets/41.gif)
+```
 
-
-## 3.5 垃圾回收算法
-
-
-
-
-
-
-
-
-
-## 3.6 垃圾回收器
-
-
-
-
-
-
+:::
 
