@@ -3,7 +3,6 @@ import timeline from "vitepress-markdown-timeline"
 import {groupIconMdPlugin, groupIconVitePlugin, localIconLoader} from 'vitepress-plugin-group-icons'
 import {figure} from '@mdit/plugin-figure'
 import {loadEnv} from 'vite'
-import {withMermaid} from 'vitepress-plugin-mermaid'
 import Permalink from "vitepress-plugin-permalink"
 import {InlineLinkPreviewElementTransform} from '@nolebase/vitepress-plugin-inline-link-preview/markdown-it'
 import terser from '@rollup/plugin-terser'
@@ -12,13 +11,13 @@ import markdownItTaskCheckbox from 'markdown-it-task-checkbox'
 import path from 'path'
 import {VitePressSidebarOptions} from "vitepress-sidebar/types"
 import {withSidebar} from "vitepress-sidebar"
-
+import {vitepressPluginLegend} from 'vitepress-plugin-legend';
 
 const mode = process.env.NODE_ENV || 'development'
 const {VITE_BASE_URL} = loadEnv(mode, process.cwd())
 console.log('Mode:', process.env.NODE_ENV)
 console.log('VITE_BASE_URL:', VITE_BASE_URL)
-const vitePressOptions = withMermaid(defineConfig({
+const vitePressOptions = defineConfig({
   rewrites: {
     'zh/:rest*': ':rest*'
   },
@@ -135,9 +134,15 @@ const vitePressOptions = withMermaid(defineConfig({
     },
     // md 配置
     config: async (md) => {
-      // // // 动态导入插件
-      // const {default: multimdTable} = await import('markdown-it-multimd-table-ext')
-      //
+      vitepressPluginLegend(md, {
+          markmap: {
+            showToolbar: true,
+          },
+          mermaid: {
+            showToolbar: true
+          }
+        }
+      )
       // 创建 markdown-it 插件
       md.use((md) => {
         const defaultRender = md.render
@@ -261,7 +266,7 @@ const vitePressOptions = withMermaid(defineConfig({
       },
     },
   }
-}))
+})
 
 const vitePressSidebarOption: VitePressSidebarOptions | VitePressSidebarOptions[] = {
   documentRootPath: 'docs',

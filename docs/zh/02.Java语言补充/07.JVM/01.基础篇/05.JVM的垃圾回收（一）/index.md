@@ -809,8 +809,8 @@ public class Test {
 
 | GC Roots 对象                                                | 描述                                                         |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| :one: 线程 Thread 对象（栈帧中的局部变量）                   | 当前运行方法中，方法参数、局部变量引用的对象，如：`Object obj = new Object();` 中的 `obj`。 |
-| :two: 系统类加载器加载的 java.lang.Class 对象，引用类中的静态变量 | 类中 `static` 修饰的变量引用的对象，如：`public static User user = new User();` 中的 `user`。 |
+| :one: 线程 Thread 对象（栈帧中的局部变量以及方法参数）       | 当前运行方法中，方法参数、局部变量引用的对象，如：`Object obj = new Object();` 中的 `obj`。 |
+| :two: 系统类加载器加载的 java.lang.Class 对象，包含对类中的静态变量的引用 | 类中 `static` 修饰的变量引用的对象，如：`public static User user = new User();` 中的 `user`。 |
 | :three: JNI 引用（本地方法调用的全局对象）                   | 本地方法（Native Code）中通过 JNI 传递的对象引用（Java 程序员无需了解，属于 JVM 底层细节） |
 | :four: 监视器对象                                            | 用来保存同步锁 synchronized 关键字持有的对象                 |
 
@@ -836,7 +836,7 @@ public class Test {
 
 > [!NOTE]
 >
-> * ① 使用 Arthas 的 heapdump 命令将`堆内存快照`保存到本地磁盘中，以 `*.hprof` 命名（IDEA 也支持）。
+> * ① 使用 Arthas 的`heapdump`命令可以将`堆内存快照`保存到本地磁盘中，以 `*.hprof` 命名（IDEA 也支持）。
 > * ② 使用 MAT 工具打开堆内存快照文件。
 > * ③ 选择 GC Roots 功能查看所有的 GC Roots 。
 
@@ -940,7 +940,7 @@ public class Test {
 
 #### 3.3.3.5 GC Roots 对象详解
 
-* ① 线程 Thread 对象（栈帧中的局部变量），即：当前运行方法中，方法参数、局部变量引用的对象。
+* ① 线程 Thread 对象（栈帧中的局部变量），即：当前运行方法中，`方法参数`、`局部变量`引用的对象。
 
 ![](./assets/21.svg)
 
