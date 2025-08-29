@@ -1753,8 +1753,9 @@ int main() {
 
 > [!NOTE]
 >
-> * ① 所谓的本地内存（Native Memory）就是 Java 进程占用的内存，即：JVM 向操作系统申请的内存，包括：方法区、Java 堆内存、线程栈、JVM 代码段、JVM 数据段等。 
-> * ② JVM 通过 malloc 等申请的堆内存也被称为本地堆（Native Heap）和 Java 对象运行的堆内存（Java Heap）是不一样的。
+> * ① Java 进程占用的内存（Java Memory/JVM Memory），即：JVM 向操作系统申请的内存，包括：方法区、Java 堆内存（Java Heap/Heap Memory）、线程栈、JVM 代码段、JVM 数据段等。 
+> * ② 本地内存：Java 进程占用的内存（Java Memory/JVM Memory）- Java 堆内存（Java Heap/Heap Memory），如：元空间（MetaSpace）、线程栈、JVM 代码端、GC 、JNI 等。
+> * ③ JVM 通过 malloc 等申请的堆内存也被称为本地堆（Native Heap）和 Java 对象运行的堆内存（Java Heap/Heap Memory）是不一样的。
 
 ![](./assets/79.svg)
 
@@ -1762,9 +1763,28 @@ int main() {
 
 ![](./assets/78.png)
 
-* 这是因为对于 Java 程序而言，除了 JVM 内存还有非 JVM 内存，如下所示：
+* 这是因为对于 Java 程序而言，除了`堆内存`之外，还有`本地内存`（堆外内存），如下所示：
 
-![](./assets/80.png)
+```markmap
+# Java 程序（Java Memory）
+
+## 堆内存（Heap Memory）
+### 年轻代
+#### 伊甸园
+#### s0 幸存者区
+#### s1 幸存者区
+### 老年代
+
+## 本地内存（Native Memory）
+### 元空间（Metaspace）
+### 线程栈（Threads）
+### 代码缓存（Code Cache）
+### 直接内存（DirectBuffer）
+### GC
+### JNI
+```
+
+
 
 ## 7.2 直接内存
 
