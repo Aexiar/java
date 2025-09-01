@@ -270,17 +270,18 @@ const vitePressSidebarOption: VitePressSidebarOptions | VitePressSidebarOptions[
   debugPrint: true,
   basePath: `${VITE_BASE_URL}`,
   collapsed: true,
-  excludePattern: ['assets', 'public', 'index.md', 'about'],
+  excludeByGlobPattern: ['assets', 'public', 'index.md', 'about'],
   includeDotFiles: true,
   includeRootIndexFile: false,
   includeEmptyFolder: true,
   includeFolderIndexFile: false,
   removePrefixAfterOrdering: true,
-  prefixSeparator: '.',
+  prefixSeparator: /^[0-9]{1,2}[-._]/,
   useFolderLinkFromIndexFile: true,
   useTitleFromFrontmatter: true,
   folderLinkNotIncludesFileName: true,
-  keepMarkdownSyntaxFromTitle: true
+  keepMarkdownSyntaxFromTitle: true,
+  sortMenusOrderNumericallyFromTitle: true
 }
 
 const rootLocale = 'zh'
