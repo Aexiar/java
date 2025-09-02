@@ -12,6 +12,7 @@ import path from 'path'
 import {VitePressSidebarOptions} from "vitepress-sidebar/types"
 import {withSidebar} from "vitepress-sidebar"
 import {vitepressPluginLegend} from 'vitepress-plugin-legend';
+import multimdTable from 'markdown-it-multimd-table';
 
 const mode = process.env.NODE_ENV || 'development'
 const {VITE_BASE_URL} = loadEnv(mode, process.cwd())
@@ -134,6 +135,15 @@ const vitePressOptions = defineConfig({
     },
     // md 配置
     config: async (md) => {
+
+      md.use(multimdTable, {
+        multiline: true,  // 启用多行支持
+        rowspan: true,    // 启用 rowspan
+        headerless: true, // 可选：支持无表头表格
+        multibody: true,  // 可选：支持多 tbody
+        autolabel: true   // 可选：自动标签
+      });
+
       vitepressPluginLegend(md, {
           markmap: {
             showToolbar: true,
