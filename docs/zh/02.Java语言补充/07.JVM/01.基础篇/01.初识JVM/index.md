@@ -551,6 +551,117 @@ int main() {
 
 ![](./assets/18.png)
 
+## 3.5 解释器和即时编译器
+
+### 3.5.1 概述
+
+* 当执行 Java 代码的时候，`执行引擎`需要将`字节码文件`中的`字节码指令`翻译为`本地机器指令`。
+
+> [!NOTE]
+>
+> * ① `执行引擎`包含了`解释器`、`即时编译器`以及`垃圾回收器`。
+> * ② `解释器`（Interpreter）和`即时编译器`（JIT, Just-In-Time Compiler）是 JVM（Java 虚拟机）中两种核心的代码执行机制，它们共同协作，使 Java 程序既能跨平台运行，又能获得接近本地代码的高性能。
+
+* 假设 Java 源代码是这样的，如下所示：
+
+```java
+class Test {
+    public static void main(String[] args) {
+        int i = 2; // [!code highlight:3]
+        int j = 3;
+        int result = i + j;
+        System.out.println(result);
+    }
+}
+```
+
+* 那么，Java 编译器就会将其编译为字节码文件，其内容如下：
+
+```txt {9-16}
+class Test {
+  Test();
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: return
+
+
+  public static void main(java.lang.String[]);
+       0: iconst_2
+       1: istore_1
+       2: iconst_3
+       3: istore_2
+       4: iload_1
+       5: iload_2
+       6: iadd
+       7: istore_3
+       8: getstatic     #7                  // Field java/lang/System.out:Ljava/io/PrintStream;
+      11: iload_3
+      12: invokevirtual #13                 // Method java/io/PrintStream.println:(I)V
+      15: return
+}
+```
+
+### 3.5.2 解释器
+
+* 当`解释器`开始工作的时候，其会`逐行解释`执行`字节码文件`中的`指令`，并生成本地机器指令。
+
+> [!NOTE]
+>
+> * ① `解释器`启动速度快，无需编译（类似即时编译器），程序一加载就开始执行，即：响应时间短（暂停时间短），用户体验好。
+> * ② `优点`：解释器内存占用小，以及启动快的特点，适合程序初识阶段。
+> * ③ `缺点`：解释器执行效率低，即：每次执行都要重新解释同一条指令。
+> * ④ `生活类比`：像一位实时翻译，一边读原文一边口译，即时但慢。
+
+![](./assets/31.svg)
+
+### 3.5.3 即时编译器
+
+* `即时编译器`会监听代码执行频率，将`热点代码`（当某段方法或循环被执行多次）`直接编译`为优化后的`本地代码`，后续调用直接执行本地代码，跳过`解释`过程。
+
+> [!NOTE]
+>
+> * ① `即时编译器`启动较慢（编译耗时），并且占用一定的内存空间，程序要等会才开始执行，即：响应时间长（暂停时间长），用户体验差（会感觉有一段时间的卡顿）。
+> * ② `优点`：执行速度快，接近 C/C++ 性能。
+> * ③ `缺点`：编译耗时，占用额外内存（初始启动阶段无法发挥作用）。
+> * ④ `生活类比`：像把常看的英文文献翻译成母语并保存，以后直接读译本，更快但需要前期投入。
+
+![](./assets/32.svg)
+
+### 3.5.4 现代 JVM 的策略
+
+* `现代JVM`采取的是`解释+JIT`混合模式，使得`JVM`在`启动速度`和`运行性能`之间取得良好平衡。
+
+> [!NOTE]
+>
+> * ① 程序启动时，解释器快速启动执行。
+>
+> * ② 同时，JVM 收集性能数据（如方法调用次数、循环次数）。
+>
+> * ③ 当某段代码被识别为“热点”，JIT 编译器将其编译为本地代码。
+>
+> * ④ 之后调用该方法时，直接执行编译后的机器码。
+>
+> * ⑤ 极端情况：分层编译（Tiered Compilation）
+>
+>   - 第 1 层：简单 JIT 编译（C1 编译器），低开销优化。
+>
+>   - 第 2 层：深度优化 JIT 编译（C2 编译器），高开销但高性能。
+
+### 3.5.5 解释器 VS 即时编译器
+
+* 解释器 VS 即时编译器，如下所示：
+
+| 特性     | 解释器           | JIT 编译器         |
+| -------- | ---------------- | ------------------ |
+| 执行方式 | 逐条解释字节码   | 编译为本地机器码   |
+| 启动速度 | 快               | 慢（需编译）       |
+| 运行性能 | 低               | 高（尤其热点代码） |
+| 内存占用 | 小               | 大（存储编译代码） |
+| 适用场景 | 初次执行、冷代码 | 频繁执行的热点代码 |
+
+* 解释器：保证 Java 程序“快速启动、跨平台运行”。
+* JIT 编译器：通过动态编译和优化，实现“高性能执行”。
+
 
 
 # 第四章：常见的 JVM（⭐）
@@ -583,3 +694,115 @@ int main() {
 
 ![](./assets/20.png)
 
+
+
+# 第五章：JVM 的发展历史
+
+## 5.1 SUN Classic VM（淘汰）
+
+* 早在 1996 年 Java 1.0 版本的时候，Sun 公司发布了一款名为 Sun Classic VM 的 Java 虚拟机，它同时也是`世界上第一款商用 Java 虚拟机`，JDK1.4 时完全被淘汰。
+* 这款虚拟机内部只提供解释器。
+* 如果使用 JIT 编译器，就需要进行外挂；但是，一旦使用了 JIT 编译器，JIT 就会接管虚拟机的执行系统，解释器就不再工作。
+
+> [!NOTE]
+>
+> 解释器和编译器不能配合工作。
+
+* 现在的 HotSpot 内置了`解释器`和`JIT 编译器`。
+
+## 5.2 Exact VM（淘汰）
+
+* 为了解决上一个虚拟机问题，jdk 1.2 时，Sun 提供了Exact VM 的 Java 虚拟机。
+
+* Exact Memory Management：准确式内存管理。
+
+  * 也可以叫 Non-Conservative/Accurate Memory Management。
+  * 此虚拟机可以知道内存中某个位置的数据具体是什么类型。
+
+* 具备现代高性能虚拟机的维形，如：
+  * 热点探测。
+  * 编译器与解释器混合工作模式。
+* 只在 Solaris 平台短暂使用，其他平台上还是 classic vm。
+
+## 5.3 HotSpot VM
+
+* HotSpot 历史：
+
+  * 最初由一家名为 “Longview Technologies” 的小公司设计。
+  * 1997 年，此公司被 Sun 收购。
+  * 2009 年，Sun 公司被甲骨文收购。
+  * `JDK 1.3 时，HotSpot VM 成为默认虚拟机`。
+
+* `目前 Hotspot 占有绝对的市场地位，称霸武林`。
+
+> [!NOTE]
+>
+> 目前默认的虚拟机都是HotSpot，Sun / Oracle JDK 和 OpenJDK 的默认虚拟机。
+
+* 从服务器、桌面到移动端、嵌入式都有应用。
+* 名称中的 HotSpot 指的就是它的热点代码探测技术。
+  * 通过计数器找到最具编译价值代码，触发即时编译或栈上替换。
+  *  通过编译器与解释器协同工作，在最优化的程序响应时间与最佳执行性能中取得平衡。
+
+##  5.4 JRockit VM
+
+* `专注于服务器端应用`，即：不太关注程序启动速度，因此 JRockit 内部不包含解析器实现，全部代码都靠`即时编译器`编译后执行。
+
+* 大量的行业基准测试显示，`JRockit JVM 是世界上最快的 JVM` 。
+
+* 优势：全面的 Java 运行时解决方案组合，如下所示：
+  - JRockit 面向延迟敏感型应用的解决方案。
+  - JRockit Real Time 提供以毫秒或微秒级的JVM响应时间，适合财务、军事指挥、电信网络的需要。
+  - MissionControl 服务套件，它是一组以极低的开销来监控、管理和分析生产环境中的应用程序的工具。
+
+* 2008年，JRockit 被 Oracle 收购。
+
+> [!NOTE]
+>
+> * ① Oracle 表达了整合两大优秀虚拟机的工作，大致在 JDK8 中完成。
+> * ② 整合的方式是在HotSpot的基础上，移植 JRockit 的优秀特性；但是，比较困难，架构不一样！！！
+
+## 5.5 J9 VM
+
+* 全称：IBM Technology for Java Virtual Machine，简称 IT4J，内部代号：J9 。
+* 市场定位与 HotSpot 接近，服务器端、桌面应用、嵌入式等多用途 VM ，广泛用于 IBM 的各种 Java 产品。
+* 目前，有影响力的三大商用服务器之一，也号称是世界上最快的 Java 虚拟机。
+* 2017 年左右，IBM 发布了开源 J9 VM，命名为 OpenJ9，交给 Eclipse 基金会管理，也称为 Ecilpse OpenJ9 。
+
+## 5.6 Azul VM
+
+* 前面三大“高性能Java虚拟机”使用在`通用`硬件平台上。
+* 这里 Azul VM 和 BEA Liquid VM 是与`特定`硬件平台绑定、软硬件配合的专有虚拟机，高性能 Java 虚拟机中的战斗机。
+* Azul VM 是 Azul Systems 公司在 HotSpot 基础上进行大量改进，运行于 Azul Systems 公司的专有硬件 Vega 系统上的 Java 虚拟机。
+* 每个 Azul VM 实例都可以管理至少数十个 CPU 和数百 GB 内存的硬件资源，并提供在巨大内存范围内实现可控的 GC 时间的垃圾收集器、专有硬件优化的线程调度等优秀特性。
+* 2010 年，Azul Systems 公司开始从硬件转向软件，发布了自己的 Zing JVM，可以在通用 x86 平台上提供接近于 Vega 系统的特性。
+
+## 5.7 Micorsoft JVM
+
+- 微软为了在 IE3 浏览器中支持 Java Applets，开发了 Microsoft JVM。
+- 只能在 Windows 平台下运行；但是，的确是当时 Windows 下性能最好的 Java VM。
+- 1997 年，Sun 以侵犯商标、不正当竞争罪名指控微软成功，赔了 Sun 很多钱。
+- 微软 WindowsXP SP3 中抹掉了其 VM 。现在 Windows 上安装的 JDK 都是 HotSpot。
+
+##  5.8 Dalvik VM
+
+- 谷歌开发的，应用于 Android 系统，并在 Android2.2 中提供了 JIT，发展迅猛。
+- Dalvik VM 只能称作虚拟机，而不能称作 “Java虚拟机”，它没有遵循 Java 虚拟机规范，不能直接执行 Java 的 Class 文件
+- 基于寄存器架构，不是 JVM 的栈架构。
+- 执行的是编译以后的 dex（Dalvik Executable）文件，执行效率比较高。
+- 它执行的 dex（Dalvik Executable）文件可以通过 class 文件转化而来，使用 Java 语法编写应用程序，可以直接使用大部分的 Java API 等。
+- Android 5.0 使用支持提前编译（Ahead of Time Compilation，AoT）的 ART VM 替换 Dalvik VM。
+
+## 5.9 Graal VM
+
+- 2018 年 4 月，Oracle Labs 公开了 Graal VM，号称 "Run Programs Faster Anywhere"，野心勃勃。
+- 与 1995 年 Java 的”write once，run anywhere" 遥相呼应。
+- Graal VM 在 HotSpot VM 基础上增强而成的跨语言全栈虚拟机，可以作为“任何语言” 的运行平台使用。
+
+> [!NOTE]
+>
+> 语言包括：Java、Scala、Groovy、Kotlin；C、C++、Javascript、Ruby、Python、R 等。
+
+- 支持不同语言中混用对方的接口和对象，支持这些语言使用已经编写好的本地库文件
+- 工作原理是将这些语言的源代码或源代码编译后的中间格式，通过解释器转换为能被 Graal VM 接受的中间表示。Graal VM 提供 Truffle 工具集快速构建面向一种新语言的解释器。在运行时还能进行即时编译优化，获得比原生编译器更优秀的执行效率。 
+- 如果说 HotSpot 有一天真的被取代，Graal VM 希望最大；但是，Java的软件生态没有丝毫变化。
