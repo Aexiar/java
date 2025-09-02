@@ -74,7 +74,7 @@
 | 大数据          | Spark、Flink（Java/Scala）                                  | 支持 Java 接口的大数据处理引擎                            |
 | 移动开发        | Android（Java/Kotlin）                                      | Java 曾是 Android 主要语言                                |
 
-## 2.2 Java && JVM
+## 2.2 Java & JVM
 
 ### 2.2.1 Java 是跨平台的语言
 
