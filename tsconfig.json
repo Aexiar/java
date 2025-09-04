@@ -9,7 +9,11 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "jsx": "preserve",
-    "types": ["node"],
+    "types": [
+      "node",
+      "vite/client",
+      "vue/macros-global"
+    ],
     "typeRoots": [
       "node_modules/@types",
       ".vitepress/types",
@@ -23,7 +27,12 @@
     "**/.vitepress/**/*.ts",
     "**/.vitepress/**/*.mts",
     "**/.vitepress/**/*.vue",
-    "src/**/*.ts", "src/**/*.d.ts", "global.d.ts"
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "global.d.ts"
   ],
-  "exclude": ["node_modules", "docs/.vitepress/dist"]
+  "exclude": [
+    "node_modules",
+    "docs/.vitepress/dist"
+  ]
 }

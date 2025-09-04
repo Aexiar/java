@@ -11,3 +11,7 @@
 @import './sidebarIcon.css';
 @import './table.css';
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+

@@ -10,7 +10,6 @@ import Confetti from "./components/Confetti.vue"
 import TypeIt from "./components/TypeIt.vue"
 import SwitchLayout from './components/SwitchLayout.vue'
 import HomeUnderline from "./components/HomeUnderline.vue"
-import MouseClick from "./components/MouseClick.vue"
 import {NProgress} from 'nprogress-v2/dist/index.js'
 import {NolebaseInlineLinkPreviewPlugin,} from '@nolebase/vitepress-plugin-inline-link-preview/client'
 import '@nolebase/vitepress-plugin-inline-link-preview/client/style.css'
@@ -67,7 +66,6 @@ export default {
     app.component('Confetti', Confetti)
     app.component('HomeUnderline', HomeUnderline)
     app.component('TypeIt', TypeIt)
-    app.component('MouseClick', MouseClick) //鼠标跟随组件
     app.component('xgplayer', xgplayer) //鼠标跟随组件
     app.use(NolebaseInlineLinkPreviewPlugin)
 

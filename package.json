@@ -39,7 +39,6 @@
   },
   "dependencies": {
     "@theojs/lumen": "5.4.6",
-    "animejs": "^3.2.2",
     "dayjs": "^2.0.0-alpha.4",
     "dotenv": "^17.2.1",
     "esbuild": "^0.25.9",

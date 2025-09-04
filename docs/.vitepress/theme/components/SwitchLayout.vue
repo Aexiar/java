@@ -18,9 +18,6 @@
     <template #nav-screen-content-after>
       <NolebaseEnhancedReadabilitiesScreenMenu/>
     </template>
-    <template #layout-top>
-      <MouseClick/>
-    </template>
     <template #home-features-after>
       <Confetti/>
       <TypeIt/>
@@ -37,7 +34,6 @@ import {useData} from "vitepress";
 import DefaultTheme from "vitepress/theme";
 import {nextTick, provide} from "vue";
 import {ShareButton} from "@theojs/lumen";
-import MouseClick from "./MouseClick.vue";
 import Confetti from "./Confetti.vue";
 import TypeIt from "./TypeIt.vue";
 import HomeUnderline from "./HomeUnderline.vue";
