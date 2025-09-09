@@ -7,4 +7,4 @@ master:
           script: npm cache clean --force && npm i && npm run docs:build
         - name: 部署到 Pages
           image: node:24
-          script: npx edgeone pages deploy ./docs/.vitepress/dist --name vitepress-java --token $EDGEONE_API_TOKEN
+          script: npx edgeone@1.0.34 pages deploy ./docs/.vitepress/dist --name vitepress-java --token $EDGEONE_API_TOKEN
