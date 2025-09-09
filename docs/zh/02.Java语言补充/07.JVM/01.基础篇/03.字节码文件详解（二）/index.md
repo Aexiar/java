@@ -118,7 +118,7 @@ class B02 extends A02 {
 > * ① `加载`、`链接`以及`初始化`中最重要的是`初始化`阶段。
 > * ② 之所以`初始化`阶段最重要，是因为程序员可以干涉，并且在笔试题中会大量涉及到。
 
-## 1.4 加载阶段
+## 1.4 加载阶段（Loading）
 
 ### 1.4.1 步骤
 
@@ -324,7 +324,7 @@ java -cp $JAVA_HOME/lib/sa-jdi.jar sun.jvm.hotspot.HSDB
 
 ![](./assets/68.gif)
 
-## 1.5 链接阶段
+## 1.5 链接阶段（Linking）
 
 ### 1.5.1 概述
 
@@ -340,7 +340,7 @@ java -cp $JAVA_HOME/lib/sa-jdi.jar sun.jvm.hotspot.HSDB
 >
 > 上述链接的三个子阶段，就是做了一些校验和前期的准备工作，并不会执行程序员写的代码。
 
-### 1.5.2 验证
+### 1.5.2 验证（Verification）
 
 #### 1.5.2.1 概述
 
@@ -529,7 +529,7 @@ public class Test {
 
 :::
 
-### 1.5.3 准备
+### 1.5.3 准备（Preparation）
 
 #### 1.5.3.1 概述
 
@@ -639,7 +639,7 @@ public class Test {
 
 :::
 
-### 1.5.4 解析
+### 1.5.4 解析（Resolution）
 
 * `符号引用`就是在字节码文件中使用`编号`来访问常量池中的内容。
 
@@ -653,7 +653,7 @@ public class Test {
 
 ![直接引用](./assets/83.gif)
 
-## 1.6 初始化阶段（⭐）
+## 1.6 初始化阶段（Initialization，⭐）
 
 ### 1.6.1 概述
 
