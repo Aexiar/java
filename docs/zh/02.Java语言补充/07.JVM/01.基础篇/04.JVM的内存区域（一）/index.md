@@ -1255,9 +1255,9 @@ public class Test {
 
 ##### 3.4.5.3.6 总结
 
-* 类加载解析 VS 动态链接：
+* 静态链接 VS 动态链接：
 
-| 对比点   | 解析阶段（Resolution）          | 动态链接（Dynamic Linking）            |
+| 对比点   | 静态链接（Static Linking）      | 动态链接（Dynamic Linking）            |
 | -------- | ------------------------------- | -------------------------------------- |
 | 发生时机 | 类加载解析阶段 / 编译期         | 运行时（首次调用）                     |
 | 指令     | `invokestatic`, `invokespecial` | `invokevirtual`, `invokeinterface`     |
