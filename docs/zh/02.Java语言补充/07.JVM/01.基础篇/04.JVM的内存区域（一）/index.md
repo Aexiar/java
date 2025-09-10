@@ -38,7 +38,7 @@
 > * ① `每个线程`独立包含`程序计数器`、`Java 虚拟机栈（栈）`、`本地方法栈`（其生命周期和线程一一对应，随着线程的启动而创建，随着线程的结束而销毁）。
 > * ② `线程`共享`堆`和`方法区`（其生命周期和 JVM 一一对应，随着 JVM 启动而创建，随着 JVM 退出而销毁）。
 
-![](./assets/91.svg)
+![](./assets/3.svg)
 
 ## 1.3 运行时数据区的应用场景
 
@@ -63,7 +63,7 @@ JDK7 和 JDK8 的内存结构上有什么区别？
 > * ① 内存溢出是指程序请求的内存超过了系统可用的内存资源，导致程序无法继续运行。
 > * ② 这通常发生在程序尝试分配更多内存，而操作系统无法满足请求时。
 
-![](./assets/3.gif)
+![](./assets/4.gif)
 
 ## 1.4 内存调优学习路线（⭐）
 
@@ -84,7 +84,7 @@ JDK7 和 JDK8 的内存结构上有什么区别？
 > * ① JVM 中的`程序计数器`（Program Counter Register，PC 寄存器）中的 Register 的命名来源于 CPU 中的`寄存器`，即：存储相关指令的现场信息。需要说明的是，CPU 只有将数据装载到寄存器中才能够执行。
 > * ② 需要注意的是，这里所说的并非广义上所指的物理寄存器，将其翻译为`PC 计数器`（指令计数器，程序钩子）会更加贴切，并且也不太容易引起一些不必要的误会。换言之，JVM 中的`程序计数器`是对`物理 PC 寄存器`的一种抽象模拟（JVM 中的程序计数器是一种软件层面上的模拟）。
 
-![](./assets/4.svg)
+![](./assets/5.svg)
 
 ## 2.2 回顾字节码指令的执行过程
 
@@ -116,17 +116,17 @@ public class Test {
 
 * 当字节码指令被加载到内存的时候，会在 Java 虚拟机栈中形成两个内存区域，即：`操作数栈`和`局部变量表`。
 
-![](./assets/5.svg)
+![](./assets/6.svg)
 
 * 其执行流程，如下所示：
 
-![](./assets/6.gif)
+![](./assets/7.gif)
 
 ## 2.3 程序计数器
 
 * 在`加载`阶段，JVM 会通过`类加载器`将`字节码文件`中的`指令`读取到`内存`中，并将`源文件`中的`偏移量`替换成`内存地址`，每一条字节码指令都有一个内存地址。
 
-![](./assets/7.svg)
+![](./assets/8.svg)
 
 * 在代码执行过程中，程序计数器`包含`当前`正在执行`的`指令`的`地址`。
 
@@ -150,7 +150,7 @@ public class Test {
 >
 > :::
 
-![](./assets/8.gif)
+![](./assets/9.gif)
 
 * 在多线程环境下，JVM 会对线程进行调度，切换正在运行的线程。
 
@@ -159,7 +159,7 @@ public class Test {
 > * ① 当线程被挂起并切换时，当前线程的程序计数器值会被保存在其线程的上下文中。
 > * ② 下次该线程被调度时，JVM 会从程序计数器保存的值恢复执行，从而使得线程能够继续从中断的地方执行。
 
-![](./assets/9.gif)
+![](./assets/10.gif)
 
 ## 2.4 细节
 
@@ -179,7 +179,7 @@ public class Test {
 
 * 在《[JVM虚拟机规范](https://docs.oracle.com/javase/specs/jvms/se17/html/jvms-2.html#jvms-2.5)》中，`栈`被分为了`Java 虚拟机栈`以及`本地方法栈`。
 
-![JVM 运行时数据区域](./assets/10.svg)
+![JVM 运行时数据区域](./assets/11.svg)
 
 * 它们本质上都属于`栈`结构，遵循`先进后出`原则。
 
@@ -190,7 +190,7 @@ public class Test {
 > * ③ `本地方法栈`是用来保存哪些使用`native`关键字修饰的方法，其底层是使用 C++ 语言来实现的方法。
 > * ④ 在`HotSpot`中，JDK 的开发人员在实现过程中发现，不管是使用个 Java 语言实现的方法，还是使用 C++ 语言实现的本地方法，本质上都是方法；换言之，只使用了一种栈结构来保存这两种不同方法的信息，即：`Java 虚拟机栈`和`本地方法栈`进行了合并。
 
-![入栈和出栈](./assets/11.gif)
+![入栈和出栈](./assets/12.gif)
 
 * 那么，`JVM 运行时数据区域`就是这样的，如下所示：
 
@@ -198,7 +198,7 @@ public class Test {
 >
 > `Java 虚拟机栈`中保存着一个个的`栈帧`（Stack Frame），对应着一次次的 Java 方法的调用。
 
-![](./assets/17.svg)
+![](./assets/13.svg)
 
 ## 3.2 虚拟机栈出现的背景
 
@@ -206,7 +206,7 @@ public class Test {
 
 * 计算机中各种硬件处理速度的对比，如下所示：
 
-![](./assets/92.jpg)
+![](./assets/14.jpg)
 
 * 计算机的各个设备部件的延迟从高到低的排列，依次是机械硬盘（HDD）、固态硬盘（SSD）、内存、CPU 。
 
@@ -214,7 +214,7 @@ public class Test {
 >
 > CPU 是最快的，一个时钟周期是 0.3 ns ，内存访问需要 120 ns ，固态硬盘访问需要 50-150 us，传统的硬盘访问需要 1-10 ms，而网络访问是最慢，需要 40 ms 以上。
 
-![](./assets/93.png)
+![](./assets/15.png)
 
 * 按着上图，将计算机世界的时间和人类世界的时候进行对比，如下所示：
 
@@ -252,7 +252,7 @@ public class Test {
 > - ① 存储器越往上速度越快，但是价格越来越贵， 越往下速度越慢，但是价格越来越便宜。
 > - ② 正是由于计算机各个部件的速度不同，容量不同，价格不同，导致了计算机系统/编程中的各种问题以及相应的解决方案。
 
-![](./assets/94.png)
+![](./assets/16.png)
 
 * 其实，对于虚拟机来说，有两种架构，如下所示：
   * :one: 基于`栈`架构的虚拟机：栈是位于内存中，速度较慢。
@@ -309,7 +309,7 @@ class Test {
 > * ① 数据的存储位置：操作数从局部变量加载到栈，计算在栈顶进行。
 > * ② 指令风格：零地址或一地址指令（隐式操作栈）。
 
-![](./assets/95.gif)
+![](./assets/17.gif)
 
 ### 3.2.3 Dalvik VM（ART VM）
 
@@ -397,11 +397,11 @@ public class Test {
 ```
 
 ```md:img [cmd 控制台]
-![](./assets/12.gif)
+![](./assets/18.gif)
 ```
 
 ```md:img [cmd 控制台]
-![](./assets/13.gif)
+![](./assets/19.gif)
 ```
 
 :::
@@ -433,7 +433,7 @@ public class Test {
 ```
 
 ```md:img [cmd 控制台]
-![](./assets/14.gif)
+![](./assets/20.gif)
 ```
 
 :::
@@ -490,11 +490,11 @@ public class Test {
 ```
 
 ```md:img [cmd 控制台]
-![](./assets/15.gif)
+![](./assets/21.gif)
 ```
 
 ```md:img [cmd 控制台]
-![](./assets/16.gif)
+![](./assets/22.gif)
 ```
 
 :::
@@ -522,7 +522,7 @@ public class Test {
 >   * `(方法)返回地址`（Return Address）：方法退出或者异常退出的定义。
 >   * `附加信息`。
 
-![](./assets/18.svg)
+![](./assets/23.svg)
 
 ### 3.4.2 局部变量表（Local Variables）
 
@@ -678,14 +678,14 @@ public class Test {
 ```
 
 ```md:img [cmd 控制台]
-![](./assets/19.gif)
+![](./assets/24.gif)
 ```
 
 :::
 
 * 其过程就是这样的，如下所示：
 
-![](./assets/20.svg)
+![](./assets/25.svg)
 
 * 其中，`局部变量表`中的`序号`指的是`源码`中`局部变量`的`编号`。
 
@@ -693,7 +693,7 @@ public class Test {
 >
 > 在源码中，i 在前，j 在后；那么，i 在局部变量表中的编号就是 0，j 在局部变量表中的编号就是 1 。
 
-![](./assets/21.svg)
+![](./assets/26.svg)
 
 * 其中，`起始程序计数器`和`长度`是用来`限制局部变量的生效范围（作用域范围）`。
 
@@ -705,7 +705,7 @@ public class Test {
 > * ④ 对于`j`变量来说，必须经过偏移量`2`步骤和`3`步骤（初始化以及赋值）之后，才可以使用；那么，`j`的起始程序计数器就是`4`，`j`的长度是`1`，就意味着只有`4`三条指令才可以使用`j`变量。
 > * ⑤ JVM 通过`局部变量表`来`控制`每一个`局部变量`能否访问`字节码指令`的范围。 换言之，如果在超过这个生效范围的字节码指令中去访问这个局部变量，该指令就会判断有问题，JVM 会拒绝执行，提高了一定的安全性。
 
-![](./assets/22.svg)
+![](./assets/27.svg)
 
 > [!CAUTION]
 >
@@ -722,11 +722,11 @@ public class Test {
 > * ③ 对于 long 和 double ，占用 2 个槽（slot）。
 > * ④ 如果需要访问`局部变量表`中`变量值`的时候，只需要使用`前一个索引`即可（long 和 double 占用 2 个槽）。
 
-![`i`占用数组下标为`0`的位置，`j`占用数组下标`1-2`的位置](./assets/23.svg)
+![`i`占用数组下标为`0`的位置，`j`占用数组下标`1-2`的位置](./assets/28.svg)
 
 * `实例方法`中的序号为`0`的位置存放的是`this`，指的是当前调用方法的对象，运行时会在内存中存放实例对象的地址。
 
-![](./assets/24.svg)
+![](./assets/29.svg)
 
 * `方法参数`也会保存在`局部变量表`中，其顺序和方法中参数的定义顺序一致。
 
@@ -734,7 +734,7 @@ public class Test {
 >
 > 局部变量表中保存的内容有：`实例方法的 this 对象`，`方法的参数`以及`方法体中声明的局部变量`。
 
-![](./assets/25.svg)
+![](./assets/30.svg)
 
 #### 3.4.2.5 细节
 
@@ -769,7 +769,7 @@ public class Test {
 > * ① 为了节省空间，`局部变量表`中`槽`是可以复用的，即：如果一个局部变量过了其作用域，那么在其作用域之后声明的新的局部变量就有可能会复用过期的变量变量的槽，从而达到`节省资源`的目的。
 > * ② 槽是 6 ，而不是 9 。
 >
-> ![](./assets/26.png)
+> ![](./assets/31.png)
 >
 > :::
 
@@ -777,7 +777,7 @@ public class Test {
 
 * 示例：执行过程的动态图
 
-![](./assets/27.gif)
+![](./assets/32.gif)
 
 #### 3.4.2.6 细节
 
@@ -823,7 +823,7 @@ public class Test {
 
 * `编译期就可以确定操作数栈的最大深度，从而在执行的时候正确地分配内存大小`。
 
-![](./assets/28.png)
+![](./assets/33.png)
 
 
 
@@ -843,7 +843,7 @@ istore_3    // 栈深度: 1→0, 最大深度: 2
 ```
 
 ```md:img [cmd 控制台]
-![](./assets/29.gif)
+![](./assets/34.gif)
 ```
 
 :::
@@ -869,7 +869,7 @@ public class Test {
 ```
 
 ```md:img [cmd 控制台]
-![](./assets/96.gif)
+![](./assets/35.gif)
 ```
 
 :::
@@ -887,259 +887,391 @@ public class Test {
 
 #### 3.4.5.2 动态链接（Dynamic Linking）
 
-##### 3.4.4.5.1 概述
-
-* `符号引用`就是在字节码文件中使用`编号`来访问常量池中的内容。
-
-![符号引用](./assets/30.png)
-
-* 在`类加载`生命周期中的`链接`阶段（解析阶段）是将常量池中的`符号引用`替换为`直接引用`。
+* 在`字节码文件`中是存在`常量池`的，我们也经常称为`静态常量池`，如下所示：
 
 > [!NOTE]
 >
-> 不使用编号，而是使用内存地址来进行具体数据的访问，就是为了性能（后续可以直接通过内存地址从内存中获取数据）。
-
-![直接引用](./assets/31.gif)
-
-* 但是，Java 并不能将所有的`符号引用`都替换为`直接引用`，如：虚方法调用（多态）。
+> ::: details 点我查看 常量池是什么？
+>
+> * ① 常量池（静态常量池）是 `.class` 文件中的一个结构，用于存储编译期间生成的各种`字面量`（Literal）和`符号引用`（Symbolic Reference），如下所示：
+>
+>   * :one: 类和接口的全限定名。
+>
+>   * :two: 字段名和描述符。
+>
+>   * :three: 方法名和描述符。
+>
+>   * :four: 字符串字面量，如："HelloWorld"。
+>
+>   * :five: 值常量，如：100、3.14 等。
+>
+>   * :six: 方法句柄、动态调用点等（JDK7+）。
+>
+> * ② 上述内容在运行时会被 JVM 加载并解析，转换为直接引用。
+>
+> :::
 
 > [!NOTE]
 >
-> * ① 静态链接（Static Linking）：在编译期就把`符号引用`变成`直接引用`，如： C/C++ 编译后的二进制。
-> * ② 动态链接（Dynamic Linking）：在运行时才把`符号引用`解析成`直接引用`，即：允许方法调用的 `延迟绑定`（Java 中的多态）。
-
-> [!CAUTION]
+> ::: details 点我查看 为什么需要常量池（静态常量池）？
 >
-> * ① 如果`字节码指令`中引用了`其他类的属性或者方法`的时候，需要将`符号引用`转换为对应的`运行时常量池`中的`内存地址`。
-> * ② 换言之，动态链接就保存了`编号`到`运行时常量池`的内存地址的映射关系。
+> * ① 避免重复存储，节省空间：
+>
+>   * 如果没有常量池，每个使用到字符串 `"Hello"` 的地方都要完整存储一遍该字符串，会造成大量冗余。
+>   * 常量池统一存储一次，其他地方只需引用其索引，如： `#1`，大大节省空间。
+>   * 例如：多个地方调用 `System.out.println("Hello")`，"Hello" 只在常量池存一份。 
+>
+> * ② 支持符号引用 → 直接引用的动态解析：
+>
+>   * Java 是动态链接语言，类在运行时才被加载。
+>   * 编译时无法知道某个类/方法/字段在内存中的真实地址，所以只能用“符号”来表示。
+>
+>   ```java
+>   // 编译时只知道要调用 PrintStream.println(String)
+>   // 但不知道 PrintStream 类在哪儿，println 方法地址是多少
+>   System.out.println("Hello");
+>   ```
+>
+>   * 这些符号（类名、方法名、描述符）都存储在常量池中，在类加载的`解析阶段`，JVM 会将这些符号引用替换为内存中的直接指针（直接引用），即：常量池是实现“动态链接”的关键桥梁。
+>
+> * ③ 提高运行时访问效率：
+>
+>   * 常量池中的数据在类加载时被加载到方法区（或元空间）的运行时常量池中，可以通过索引快速访问，避免重复解析和查找。
+>   * 例如：`invokevirtual #5` —— `#5` 是常量池索引，指向某个方法符号引用，JVM 可快速定位并调用。
+>
+> * ④ 支持反射、动态代理、注解等高级特性：
+>
+>   * 反射机制需要通过类名、方法名、字段名动态查找成员，这些名称都来自常量池，即：没有常量池，反射就无法工作。
+>   * 注解的值、动态代理生成的类名、Lambda 表达式的方法引用等，也都依赖常量池存储元数据。
+>
+> * ⑤ 支持字符串常量优化（如字符串驻留）：
+>
+>   * Java 中的字符串字面量会自动“驻留”（intern）到字符串常量池，避免重复创建对象，如：
+>
+>   ```java
+>   String s1 = "hello";
+>   String s2 = "hello";
+>   System.out.println(s1 == s2); // true —— 指向同一个常量池对象
+>   ```
+>
+>   * 上述的 `"hello"` 就存储在常量池中。
+>
+> :::
 
-![](./assets/32.svg)
+![](./assets/36.gif)
 
-##### 3.4.5.2.2 为什么需要动态链接？
+* `字节码文件`被加载到内存时，会在`解析`阶段，将`静态常量池`转换为`运行时常量池`。
 
-* 虽然在`解析阶段`能处理一部分`静态可确定`的符号引用；但是，在运行时仍有大量调用`动态链接`。
+![](./assets/37.svg)
+
+* 每个`栈帧`内部包含一个`指向运行时常量池`的`方法引用`，其目的是为了支持当前方法的代码能够实现`动态链接`，如：`invokevirtual #4` 。
+
+![](./assets/38.svg)
+
+* 之前，我们提过在`类加载`生命周期中的`链接`阶段（解析阶段）是将常量池中的`符号引用`替换为`直接引用`。
 
 > [!NOTE]
 >
-> 解析阶段并不能将所有的`符号引用`一次性的`全部替换`为`直接引用`的原因有两点，如下所示：
+> * ① 有些字节码指令是这样的，如：`invokevirtual #4`。
+> * ② `#4` 是`符号引用`，在执行引擎执行的时候，会将 `#4` （符号引用）`转换`为`内存地址`（直接引用），如：`#4 --> 0x12457832`，即：`动态链接`就保存了`编号`（偏移量）到`运行时常量池`的内存地址的映射关系。
+
+![](./assets/39.gif)
+
+#### 3.4.5.3 方法的调用
+
+##### 3.4.5.3.1 概述
+
+* 在 JVM 中，将`符号引用`替换为`直接引用`和`方法的绑定机制`有关。
+
+> [!NOTE]
 >
-> * ① `延迟解析`（Lazy Resolution）：JVM 规范允许在真正使用某个符号引用时才解析，而不是类加载时全部解析。
-> * ② `多态与动态绑定`（Polymorphism & Dynamic Binding）：有些调用在编译期根本无法确定目标（ `invokevirtual`），只能在运行时动态决定。
+> 在`解析`阶段并不能将`所有`的`符号引用`都替换为`直接引用`，如：虚方法调用（多态）。
 
-* 动态链接的典型例子 --- 虚方法调用（Virtual Method Call）：
+##### 2.4.5.3.2 静态链接
 
-::: code-group
+* 在`类加载`的“`解析阶段`”或`编译期`，就确定方法调用的具体目标，绑定后不再改变。
 
-```java [Test.java]
-abstract class Animal {
+> [!NOTE]
+>
+> 静态链接（Static Linking）：在`编译期`就把`符号引用`变成`直接引用`，如：Java 中静态方法的调用。
 
-    public abstract void eat();
+* `静态链接`对应的`执行流程图`，如下所示：
+
+> [!NOTE]
+>
+> ::: details 点我查看 静态链接过程
+>
+> * ① 类加载 → 验证 → 解析（Resolution）阶段。
+> * ② 将常量池中的符号引用（如 `#3 = Methodref: Animal/speak`）替换为直接引用（内存地址或偏移），即：早期绑定。
+> * ③ 之后调用直接跳转，无需再解析。
+>
+> :::
+
+![](./assets/40.png)
+
+* `静态链接`对应着`非虚方法`（不需要经过虚方法表），即：如果方法在编译期就确定了具体的调用版本，这个版本在运行时是不可变的，那么这样的方法就是`非虚方法`。
+
+> [!NOTE]
+>
+> 在 Java 中，静态方法、私有方法、final 方法、实例构造器以及父类方法都是非虚方法。
+
+
+
+* 示例：
+
+```java
+package com.github;
+
+class Father {
+    public void show() {
+        System.out.println("Father");
+    }
+    void normalMethod() {
+        System.out.println("normalMethod");
+    }
+
+}
+
+class Son extends Father {
+    @Override
+    public void show() {
+        super.normalMethod(); // invokespecial → 静态绑定到 Father.normalMethod
+        privateMethod(); // invokespecial → 静态绑定到 Son.privateMethod
+        Math.max(1, 2); // invokestatic → 静态绑定到 Math.max
+        System.out.println("Son");
+    }
+
+
+    private void privateMethod() {
+        System.out.println("Son privateMethod");
+    }
+}
+
+
+public class Test {
+    public static void main(String[] args) {
+        Father father = new Son();
+        father.show(); // 动态绑定
+    }
+}
+```
+
+##### 2.4.5.3.3 动态链接
+
+* `动态链接`：在方法调用时，根据对象的实际类型（运行时类型），动态解析并绑定到具体实现方法的过程。
+
+> [!NOTE]
+>
+> 动态链接（Dynamic Linking）：在`运行时`才把`符号引用`解析成`直接引用`，即：Java 中的多态。
+
+* `动态链接`对应的`执行流程图`，如下所示：
+
+> [!NOTE]
+>
+> ::: details 点我查看 动态链接过程
+>
+> * ① 首次调用 `invokevirtual` 时，触发“动态解析”。
+> * ② JVM 根据对象头中的 `Klass 指针` → 找到实际类型 → 查找其 `vtable`。
+> * ③ 根据方法签名在 vtable 中找到实际方法入口 → 缓存（方法调用）→ 后续直接调用。
+> * ④ JIT 编译后可能内联或优化为直接调用（去虚拟化）。
+>
+> :::
+
+
+
+![](./assets/41.png)
+
+* `动态链接`对应着`虚方法`（需要经过虚方法表），即：在编译期无法确定具体调用版本，必须在运行时根据对象的实际类型动态决定调用哪个方法实现 的方法，那么这样的方法是`虚方法`。
+
+> [!NOTE]
+>
+> 在 Java 中，所有可以被子类重写的 public / protected /default 实例方法，默认都是虚方法。
+
+
+
+* 示例：
+
+```java
+package com.github;
+
+class Animal {
+    public void speak() {
+        System.out.println("Animal speaks.");
+    }
 }
 
 class Dog extends Animal {
     @Override
-    public void eat() {
-        System.out.println("狗吃饭");
+    public void speak() {
+        System.out.println("Dog barks!");
     }
 }
+
+class Cat extends Animal {
+    @Override
+    public void speak() {
+        System.out.println("Cat meows!");
+    }
+}
+
 
 public class Test {
     public static void main(String[] args) {
-        Animal animal = new Dog();
-        /*
-        编译期只知道 eat() 是个符号引用；
-        在运行时，需要通过对象实际类型去查找vtable(虚方法表），跳转到对应的方法实现
-        */
-        animal.eat();
+        Animal a1 = new Dog();
+        Animal a2 = new Cat();
+
+        a1.speak(); // invokevirtual — 实际调用 Dog.speak()
+        a2.speak(); // invokevirtual — 实际调用 Cat.speak()
     }
 }
 ```
 
-```cmd [字节码指令]{6}
- 0 new #2 <com/github/Dog>
- 3 dup
- 4 invokespecial #3 <com/github/Dog.<init> : ()V>
- 7 astore_1
- 8 aload_1
- 9 invokevirtual #4 <com/github/Animal.eat : ()V> 
-12 return
+##### 3.4.5.3.4 为什么会出现动态绑定？
+
+* 随着高级语言的横空出世，类似于 Java 一样的基于面向对象的编程语言如今越来越多，尽管这类编程语言在语法风格上存在一定的差别，但是它们彼此之间始终保持着一个共性，那就是都支持封装、继承和多态等面向对象特性，`既然这一类的编程语言具备多态特性，那么自然也就具备早期绑定和晚期绑定两种绑定方式`。
+* Java 中任何一个普通的方法其实都具备`虚函数`的特征，它们相当于 C++ 语言中的虚函数（C++ 中则需要使用关键字 virtual 来显式定义）。如果在 Java 程序中不希望某个方法拥有虚函数的特征时，则可以使用关键字 final 来标记这个方法。
+
+##### 3.5.5.3.5 如何确定虚方法和非虚方法
+
+* `静态链接`对应着`非虚方法`（不需要经过虚方法表），即：如果方法在编译期就确定了具体的调用版本，这个版本在运行时是不可变的，那么这样的方法就是`非虚方法`。
+
+> [!NOTE]
+>
+> 在 Java 中，静态方法、私有方法、final 方法、实例构造器以及父类方法都是非虚方法。
+
+* `动态链接`对应着`虚方法`（需要经过虚方法表），即：在编译期无法确定具体调用版本，必须在运行时根据对象的实际类型动态决定调用哪个方法实现 的方法，那么这样的方法是`虚方法`。
+
+> [!NOTE]
+>
+> 在 Java 中，所有可以被子类重写的 public / protected /default 实例方法，默认都是虚方法。
+
+* 我们可以通过`方法调用`对应的`字节码指令`来区分什么是虚方法，什么是非虚方法。
+
+```mermaid
+flowchart LR
+    A[方法调用字节码指令] --> B[普通调用指令]
+    A --> C[动态调用指令]
+    
+    B --> D[非虚方法]
+    B --> E[虚方法]
+    
+    D --> F[invokestatic]
+    D --> G[invokespecial]
+    
+    E --> H[invokevirtual]
+    E --> I[invokeinterface]
+    
+    C --> J[invokedynamic]
+    
+    F --> F1[调用静态方法 --> 解析阶段确定唯一方法版本]
+    
+    G --> G1[调用&lt;init&gt;方法 --> 解析阶段确定唯一方法版本]
+    G --> G2[调用私有方法 --> 解析阶段确定唯一方法版本]
+    G --> G3[调用父类方法 --> 解析阶段确定唯一方法版本]
+    
+    H --> H1[调用所有虚方法]
+    H --> H2[除了final修饰的方法]
+    
+    I --> I1[调用接口方法]
+    
+    J --> J1[动态解析出需要调用的方法，然后执行]
+    
+    classDef nonVirtual fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef virtual fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
+    classDef dynamic fill:#ffebee,stroke:#c62828,stroke-width:2px
+    classDef staticCall fill:#e1f5fe,stroke:#0288d1,stroke-width:2px
+    classDef specialCall fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef virtualCall fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
+    classDef interfaceCall fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    
+    class D nonVirtual
+    class E virtual
+    class F,F1,F2 staticCall
+    class G,G1,G2,G3,G4 specialCall
+    class H,H1,H2 virtualCall
+    class I,I1 interfaceCall
+    class J,J1,J2 dynamic
 ```
 
-:::
+* 前四条指令固化在虚拟机内部，方法的调用执行不可人为干预，而 invokedynamic 指令则支持由用户确定方法版本。
 
-* 动态链接的典型例子 --- 接口方法调用（invokeinterface）：
+> [!NOTE]
+>
+> * ① JVM 字节码指令集一直比较稳定，一直到 Java7 中才增加了一个 invokedynamic 指令，这是 Java 为了实现『动态类型语言」支持而做的一种改进。
+> * ② 在 Java7 中并没有提供直接生成 invokedynamic 指令的方法，需要借助 ASM 这种底层字节码工具来产生 invokedynamic 指令。直到 Java8 的 Lambda 表达式的出现，invokedynamic 指令的生成，在 Java 中才有了直接的生成
+>   方式。
+> * ③ Java7 中增加的动态语言类型支持的本质是对 Java 虚拟机规范的修改，而不是对 Java 语言规则的修改，这一块相对来讲比较复杂，增加了虚拟机中的方法调用，最直接的受益者就是运行在 Java 平台的动态语言的编译器。
 
-::: code-group
 
-```java [Test.java]
-// 接口
-interface Fly {
 
-    void fly();
-}
+* 示例：
 
-// 实现类
-class Bird implements Fly {
-    @Override
-    public void fly() {
-        System.out.println("鸟飞");
-    }
-}
-
-// 实现类
-class Plane implements Fly {
-    @Override
-    public void fly() {
-        System.out.println("飞机飞");
-    }
-}
-
-// 实现类
-class Ship implements Fly {
-    @Override
-    public void fly() {
-        System.out.println("船飞");
-    }
-}
-
+```java
 public class Test {
+
     public static void main(String[] args) {
-       Fly fly = new Bird();
-       // 接口的实现类很多，只有在运行的时候才能确定真正调用那个实现类的方法
-       fly.fly();
+        // 1. 调用静态方法 → invokestatic
+        staticMethod();
+
+        // 2. 调用构造器 → invokespecial
+        NonVirtualExample obj = new NonVirtualExample();
+
+        // 3. 调用私有方法 → invokespecial
+        obj.privateMethod();
+
+        // 4. 调用 final 方法 → invokevirtual（但 JVM 知道不可重写，可静态优化）
+        obj.finalMethod();
+
+        // 5. 调用父类方法 → invokespecial
+        obj.callSuper();
+    }
+
+    // 1. 静态方法 → 非虚
+    public static void staticMethod() {
+        System.out.println("Static method called");
+    }
+
+    // 2. 构造器 → 非虚
+    public NonVirtualExample() {
+        System.out.println("Constructor called");
+    }
+
+    // 3. 私有方法 → 非虚
+    private void privateMethod() {
+        System.out.println("Private method called");
+    }
+
+    // 4. final 方法 → 非虚（不可被重写）
+    public final void finalMethod() {
+        System.out.println("Final method called");
+    }
+
+    // 5. 调用父类方法示例
+    public void callSuper() {
+        super.toString(); // 调用 Object.toString() → invokespecial
     }
 }
 ```
 
-```cmd [字节码指令] {6}
- 0 new #2 <com/github/Bird>
- 3 dup
- 4 invokespecial #3 <com/github/Bird.<init> : ()V>
- 7 astore_1
- 8 aload_1
- 9 invokeinterface #4 <com/github/Fly.fly : ()V> count 1 
-14 return
-```
-
-:::
-
-* 动态链接的典型例子 --- 反射调用：
-
-::: code-group
-
-```java [Test.java]
-package com.github;
-
-// 接口
-interface Fly {
-
-    void fly();
-}
-
-// 实现类
-class Bird implements Fly {
-    @Override
-    public void fly() {
-        System.out.println("鸟飞");
-    }
-}
-
-// 实现类
-class Plane implements Fly {
-    @Override
-    public void fly() {
-        System.out.println("飞机飞");
-    }
-}
-
-// 实现类
-class Ship implements Fly {
-    @Override
-    public void fly() {
-        System.out.println("船飞");
-    }
-}
-
-public class Test {
-    public static void main(String[] args) {
-       Class<?> clazz = Class.forName("com.github.Bird");
-       // 反射在编译期压根不知道调用哪个方法
-       // 反射只有在运行期才知道调用哪个方法
-       Method fly = clazz.getMethod("fly");
-       fly.invoke(clazz.newInstance());
-    }
-}
-```
-
-```cmd [字节码指令] {8}
-0 ldc #2 <com.github.Bird>
- 2 invokestatic #3 <java/lang/Class.forName : (Ljava/lang/String;)Ljava/lang/Class;>
- 5 astore_1
- 6 aload_1
- 7 ldc #4 <fly>
- 9 iconst_0
-10 anewarray #5 <java/lang/Class>
-13 invokevirtual #6 <java/lang/Class.getMethod : (Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;>
-16 astore_2
-17 aload_2
-18 aload_1
-19 invokevirtual #7 <java/lang/Class.newInstance : ()Ljava/lang/Object;>
-22 iconst_0
-23 anewarray #8 <java/lang/Object>
-26 invokevirtual #9 <java/lang/reflect/Method.invoke : (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;>
-29 pop
-30 return
-```
-
-:::
-
-* 动态链接的典型例子 --- 动态语言支持：
-
-::: code-group
-
-```java [Test.java]
-public class Test {
-    public static void main(String[] args) {
-        /*
-        invokedynamic 指令是为支持 JVM 上的动态语言引入的，如：Lambda 表达式。
-        方法绑定完全延迟到运行时。
-        */            
-        Thread thread = new Thread(() -> System.out.println("线程运行"));
-        thread.start();
-    }
-}
-```
-
-```cmd [字节码指令] {3}
- 0 new #2 <java/lang/Thread>
- 3 dup
- 4 invokedynamic #3 <run, BootstrapMethods #0>
- 9 invokespecial #4 <java/lang/Thread.<init> : (Ljava/lang/Runnable;)V>
-12 astore_1
-13 aload_1
-14 invokevirtual #5 <java/lang/Thread.start : ()V>
-17 return
-```
-
-:::
-
-##### 3.4.5.2.3 总结
+##### 3.4.5.2.6 总结
 
 * 类加载解析 VS 动态链接：
 
-| 对比点   | 解析阶段（Resolution）           | 动态链接（Dynamic Linking）                 |
-| -------- | -------------------------------- | ------------------------------------------- |
-| 时间点   | 类加载时（或第一次使用时）       | 方法调用的运行时                            |
-| 解析范围 | 能静态确定的符号引用             | 需要运行时才能确定的调用                    |
-| 特点     | 一次性完成或延迟完成             | 每次调用时都可能发生                        |
-| 适用场景 | 静态方法、私有方法、final 方法等 | 虚方法、接口方法、多态、反射、invokedynamic |
+| 对比点   | 解析阶段（Resolution）          | 动态链接（Dynamic Linking）            |
+| -------- | ------------------------------- | -------------------------------------- |
+| 发生时机 | 类加载解析阶段 / 编译期         | 运行时（首次调用）                     |
+| 指令     | `invokestatic`, `invokespecial` | `invokevirtual`, `invokeinterface`     |
+| 绑定目标 | 固定，编译时可知                | 由对象实际类型决定（多态）             |
+| 性能     | ⚡ 极快（直接跳转）              | ⏱️ 首次慢（查表），后续快（缓存/JIT）   |
+| 灵活性   | ❌ 不支持重写/多态               | ✅ 支持继承、接口、运行时替换           |
+| 典型应用 | 工具类方法、构造器、私有方法    | 面向对象核心：接口、抽象类、策略模式等 |
 
 * `类加载`的`解析阶段`是 `能静态确定的先解析好`。
 * `动态链接`是`运行时根据实际对象和上下文动态解析`，尤其是支持`多态`和`延迟绑定`的核心机制。
 
 #### 3.4.5.3 返回地址（Return Address）
 
-* 返回地址就是方法正常退出或异常退出的定义。
+* `返回地址就是方法正常退出或异常退出的定义`。
 
 * 在多线程环境下，JVM 会对线程进行调度，切换正在运行的线程。
 
@@ -1148,7 +1280,7 @@ public class Test {
 > * ① 当线程被挂起并切换时，当前线程的程序计数器值会被保存在其线程的上下文中。
 > * ② 下次该线程被调度时，JVM 会从程序计数器保存的值恢复执行，从而使得线程能够继续从中断的地方执行。
 
-![](./assets/33.svg)
+![](./assets/42.svg)
 
 * 程序计数器是怎么知道上一个栈帧中下一个指令的地址的？答案是`返回地址`（Return Address）。
 
@@ -1157,7 +1289,7 @@ public class Test {
 > * ① 当调用一个方法时，调用指令（`invokestatic`, `invokevirtual` 等）不仅会创建新栈帧，还会在调用者的栈帧里保存`调用点的下一条字节码指令地址`。
 > * ② 被调用方法执行完后，JVM 会弹出当前栈帧，把控制权交回调用者，并`跳转到这个保存的地址`继续执行。
 
-![](./assets/34.gif)
+![](./assets/43.gif)
 
 #### 3.4.5.4 附加信息
 
@@ -1176,7 +1308,7 @@ public class Test {
 
 * `Java虚拟机栈`中的`栈帧`过多，占用内存超过`栈内存`可以分配的最大大小就会出现`内存溢出`。
 
-![](./assets/38.gif)
+![](./assets/44.gif)
 
 * `JVM`给`虚拟机栈`分配内存有一个上限，如果超过了这个上限，就会出现`内存溢出`。
 
@@ -1190,7 +1322,7 @@ public class Test {
 > | Linux            | 1024 KB（1 MB）          |
 > | Windows          | 基于操作系统的默认值     |
 
-![](./assets/39.svg)
+![](./assets/45.svg)
 
 ### 3.5.2 模拟栈内存溢出
 
@@ -1229,7 +1361,7 @@ public class Test {
 ```
 
 ```md:img [cmd 控制台]
-![](./assets/40.gif)
+![](./assets/46.gif)
 ```
 
 :::
@@ -1293,7 +1425,7 @@ public class Test {
 ```
 
 ```md:img [cmd 控制台]
-![](./assets/41.gif)
+![](./assets/47.gif)
 ```
 
 :::
@@ -1320,7 +1452,7 @@ public class Test {
 >
 > * ② `本地方法栈`会在栈内存上生成一个栈帧，包含了`局部变量表`、`操作数栈`以及`帧数据`。
 
-![](./assets/36.svg)
+![](./assets/48.svg)
 
 ## 4.2 演示
 
@@ -1359,7 +1491,7 @@ public class Test {
 ```
 
 ```md:img [cmd 控制台]
-![](./assets/37.gif)
+![](./assets/49.gif)
 ```
 
 :::

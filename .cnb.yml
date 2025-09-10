@@ -2,7 +2,7 @@ master:
   push:
     - imports: https://cnb.cool/Aurorxa/passkey/-/blob/main/envs.yml
       stages:
-        - name: 构建当前项目
+        - name: "🔧 构建当前项目"
           image: node:24
           script: |
             npm install -g pnpm
@@ -10,6 +10,6 @@ master:
             pnpm config set public-hoist-pattern *
             pnpm install
             pnpm run docs:build
-        - name: 部署到 Pages
+        - name: "🚀 部署到 Pages"
           image: node:24
           script: npx edgeone@1.0.34 pages deploy ./docs/.vitepress/dist --name vitepress-java --token $EDGEONE_API_TOKEN
