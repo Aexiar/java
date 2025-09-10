@@ -60,5 +60,14 @@
   "optionalDependencies": {
     "@esbuild/linux-x64": "0.25.0",
     "@rollup/rollup-linux-x64-gnu": "^4.34.9"
+  },
+  "pnpm": {
+    "packageExtensions": {
+      "@vitest/browser": {
+        "peerDependencies": {
+          "vite": "^6"
+        }
+      }
+    }
   }
 }
