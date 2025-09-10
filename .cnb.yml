@@ -6,6 +6,8 @@ master:
           image: node:24
           script: |
             npm install -g pnpm
+            pnpm config set shamefully-hoist true
+            pnpm config set public-hoist-pattern *
             pnpm install
             pnpm run docs:build
         - name: 部署到 Pages
