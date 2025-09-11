@@ -11,8 +11,9 @@ import markdownItTaskCheckbox from 'markdown-it-task-checkbox'
 import path from 'path'
 import {VitePressSidebarOptions} from "vitepress-sidebar/types"
 import {withSidebar} from "vitepress-sidebar"
-import {vitepressPluginLegend} from 'vitepress-plugin-legend';
-import multimdTable from 'markdown-it-multimd-table';
+import {vitepressPluginLegend} from 'vitepress-plugin-legend'
+import multimdTable from 'markdown-it-multimd-table'
+import {qrcode} from 'vite-plugin-qrcode'
 
 const mode = process.env.NODE_ENV || 'development'
 const {VITE_BASE_URL} = loadEnv(mode, process.cwd())
@@ -71,6 +72,7 @@ const vitePressOptions = defineConfig({
       ],
     },
     plugins: [
+      qrcode(),
       terser(),
       //代码组图标
       (groupIconVitePlugin({

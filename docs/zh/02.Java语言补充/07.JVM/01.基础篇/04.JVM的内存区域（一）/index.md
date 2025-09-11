@@ -136,6 +136,8 @@ public class Test {
 > * ② 程序计数器可以控制程序指令的执行，实现分支、跳转、异常等逻辑。
 > * ③ `程序计数器`需要和`执行引擎`（解释器、JIT）配合使用，即：`执行引擎`从`程序计数器`根据`地址`取出指令，执行该指令，`程序计数器`自动`更新`为下一条指令的地址（取指 --> 执行 --> PC 更新）。
 > * ④ JVM 规范层面：`PC 寄存器`代表的是`当前正在执行的指令的位置`；但是，`实现层面`（HotSpot 等主流实现）：`PC 寄存器`通常保存的是`下一条指令的地址`。
+> * ⑤ 如果执行的是 Java 方法，线程的`程序计数器`保存的是当前方法的`字节码位置`（符号引用、偏移量或内存地址）。
+> * ⑥ 如果执行的是 Native 方法（使用 native 关键字修饰的方法），线程的`程序计数器`保存的是 `null` 。
 
 > [!NOTE]
 >
@@ -156,7 +158,7 @@ public class Test {
 
 > [!NOTE]
 >
-> * ① 当线程被挂起并切换时，当前线程的程序计数器值会被保存在其线程的上下文中。
+> * ① 当线程被挂起并切换时，当前线程的`程序计数器`值会被保存在其线程的上下文中。
 > * ② 下次该线程被调度时，JVM 会从程序计数器保存的值恢复执行，从而使得线程能够继续从中断的地方执行。
 
 ![](./assets/10.gif)
@@ -359,7 +361,7 @@ ret             ; 返回 eax
 
 * JVM 采用基于`栈`的设计，强调`简单性、可移植性和安全性`。
 * 基于`寄存器`的虚拟机（ART）强调`执行效率和紧凑性`，更适合资源受限环境。
-* 两者各有优劣，现代 JVM 通过 JIT 技术弥补了栈模型的性能劣势，实际运行性能依然非常强大。
+* 两者各有优劣，现代高性能 JVM 通过 JIT 技术弥补了栈模型的性能劣势，实际运行性能依然非常强大。
 
 ## 3.3 Java 虚拟机栈
 
@@ -1001,7 +1003,7 @@ public class Test {
 >
 > ::: details 点我查看 静态链接过程
 >
-> * ① 类加载 → 验证 → 解析（Resolution）阶段。
+> * ① 类加载 → 验证 → 解析阶段。
 > * ② 将常量池中的符号引用（如 `#3 = Methodref: Animal/speak`）替换为直接引用（内存地址或偏移），即：早期绑定。
 > * ③ 之后调用直接跳转，无需再解析。
 >
@@ -1271,25 +1273,256 @@ public class Test {
 
 #### 3.4.5.3 返回地址（Return Address）
 
-* `返回地址就是方法正常退出或异常退出的定义`。
+##### 3.4.5.3.1 概述
 
-* 在多线程环境下，JVM 会对线程进行调度，切换正在运行的线程。
+* 当一个方法开始执行的时候，有两种方式可以退出，如下所示：
+  * :one: 正常完成出口（通过字节码指令 return ）：执行引擎遇到任意一个方法返回的字节码指令，即：方法执行完毕，正常退出。
+  * :two: 异常完成出口（通过异常处理表）：在方法执行过程中遇到异常，并且该异常没有被捕获，即：方法没有执行完毕，非正常退出。
 
-> [!NOTE]
+* 无论那种退出方式，在方法退出后，都需要返回到该方法被调用的位置。
+
+> [!CAUTION]
 >
-> * ① 当线程被挂起并切换时，当前线程的程序计数器值会被保存在其线程的上下文中。
-> * ② 下次该线程被调度时，JVM 会从程序计数器保存的值恢复执行，从而使得线程能够继续从中断的地方执行。
+> `正常完成出口`和`异常完成出口`的区别在于：通过异常完成出口退出的不会给它的上层调用者生任何的返回值。
 
-![](./assets/42.svg)
 
-* 程序计数器是怎么知道上一个栈帧中下一个指令的地址的？答案是`返回地址`（Return Address）。
 
-> [!NOTE]
->
-> * ① 当调用一个方法时，调用指令（`invokestatic`, `invokevirtual` 等）不仅会创建新栈帧，还会在调用者的栈帧里保存`调用点的下一条字节码指令地址`。
-> * ② 被调用方法执行完后，JVM 会弹出当前栈帧，把控制权交回调用者，并`跳转到这个保存的地址`继续执行。
+* 示例：正常完成出口
 
+::: code-group
+
+```java [Test.java]
+package com.github;
+
+public class Test {
+    public static void main(String[] args) {
+        System.out.println("main start ...");
+        
+        // 调用 methodA 
+        methodA(); 
+        
+        // methodA() 方法返回后，从这里继续
+        System.out.println("main end ...");
+    }
+
+    public static void methodA(){
+        System.out.println("methodA start ...");
+
+        // 调用 methodB
+        methodB();
+
+        // methodB() 方法返回后，从这里继续 
+        System.out.println("methodA end ...");
+        
+        // 正常完成出口，对应的指令是 return
+        // 不写，也相当于 return;
+        return; // [!code highlight]
+    }
+
+    private static int methodB() {
+
+        System.out.println("methodB start ...");
+
+        // 调用 methodC
+        methodC();
+
+        // methodC() 方法返回后，从这里继续 
+        System.out.println("methodB end ...");
+
+        // 正常完成出口，对应的指令是 ireturn
+        return 1;  // [!code highlight]
+    }
+
+    public static double methodC(){
+        System.out.println("methodC start ...");
+
+        System.out.println("...");
+
+        System.out.println("methodC end ...");
+
+        // 正常完成出口，对应的指令是 dreturn
+        return 1.0; // [!code highlight]
+    }
+
+}
+```
+
+```cmd [控制台]
+methodA start ...
+methodB start ...
+methodC start ...
+...
+methodC end ...
+methodB end ...
+methodA end ...
+```
+
+```md:img [cmd 控制台]
+![](./assets/42.gif)
+```
+
+```md:img [cmd 控制台]
+![](./assets/44.svg)
+```
+
+:::
+
+
+
+* 示例：异常完成出口
+
+::: code-group
+
+```java [Test.java]
+package com.github;
+
+public class Test {
+    public static void main(String[] args) {
+        System.out.println("main start ...");
+        
+        // 调用 methodA 
+        methodA(); 
+        
+        // methodA() 方法返回后，从这里继续
+        System.out.println("main end ...");
+    }
+
+    public static void methodA(){
+        System.out.println("methodA start ...");
+
+        // 调用 methodB
+        methodB();
+
+        // methodB() 方法返回后，从这里继续 
+        System.out.println("methodA end ...");
+        
+        // 正常完成出口，对应的指令是 return
+        // 不写，也相当于 return;
+        return; // [!code highlight]
+    }
+
+    private static int methodB() {
+
+        System.out.println("methodB start ...");
+
+        // 调用 methodC
+        // 没有对 methodC 进行异常捕获，程序会在这里停止执行
+        methodC();  
+
+        // methodC() 方法返回后，从这里继续 
+        System.out.println("methodB end ...");
+
+        // 正常完成出口，对应的指令是 ireturn
+        return 1;  // [!code highlight]
+    }
+
+    public static double methodC(){
+        System.out.println("methodC start ...");
+
+        System.out.println("...");
+        
+        // 出现异常；但是，没有处理
+        int i = 10 / 0;
+
+        System.out.println("methodC end ...");
+
+        // 正常完成出口，对应的指令是 dreturn
+        return 1.0; // [!code highlight]
+    }
+
+}
+```
+
+```cmd
+main start ...
+methodA start ...
+methodB start ...
+methodC start ...
+...
+Exception in thread "main" java.lang.ArithmeticException: / by zero
+	at com.github.Test.methodC(Test.java:48)
+	at com.github.Test.methodB(Test.java:33)
+	at com.github.Test.methodA(Test.java:18)
+	at com.github.Test.main(Test.java:8)
+```
+
+```md:img [cmd 控制台]
 ![](./assets/43.gif)
+```
+
+```md:img [cmd 控制台]
+![](./assets/45.svg)
+```
+
+:::
+
+##### 3.4.5.3.2 返回地址
+
+* `方法返回地址`是`调用者方法中，调用指令的下一条指令的地址`，`被保存在被调用方法的栈帧中`。
+
+> [!NOTE]
+>
+> * ① 如果是正常退出，调用者的 PC 寄存器的值作为返回地址，即：调用该方法指令的下一条指令的地址。
+> * ② 如果异常退出，返回地址是通过异常处理表来确定的；换言之，此时的栈帧是不会保存这部分信息的。
+> * ③ 当方法执行完，JVM 使用返回地址来设置调用者的 PC，从而继续执行。
+
+
+
+* 示例：Java 代码、执行结果和对应的字节码指令
+
+::: code-group
+
+```java [Test.java]
+package com.github;
+
+public class Test {
+    public static void main(String[] args) {
+        System.out.println("Step 1");
+        foo();                         // ← 调用 foo()
+        System.out.println("Step 3");  // ← foo() 返回后，从这里继续！
+    }
+
+    public static void foo() {
+        System.out.println("Step 2");
+    }
+}
+```
+
+```cmd 
+Step 1
+Step 2
+Step 3
+```
+
+```txt [字节码指令]
+public static void main(java.lang.String[]);
+  Code:
+     0: getstatic     #2      // System.out
+     3: ldc           #3      // "Step 1"
+     5: invokevirtual #4      // println
+     8: invokestatic  #5      // foo() ← 调用 foo()，下一条指令是 11
+    11: getstatic     #2      // System.out ← ★返回地址指向这里★
+    14: ldc           #6      // "Step 3"
+    16: invokevirtual #4      // println
+    19: return
+
+public static void foo();
+  Code:
+     0: getstatic     #2      // System.out
+     3: ldc           #7      // "Step 2"
+     5: invokevirtual #4      // println
+     8: return                 // ← 执行 return，触发“返回操作”
+```
+
+:::
+
+
+
+
+
+
+
+
 
 #### 3.4.5.4 附加信息
 
@@ -1308,7 +1541,7 @@ public class Test {
 
 * `Java虚拟机栈`中的`栈帧`过多，占用内存超过`栈内存`可以分配的最大大小就会出现`内存溢出`。
 
-![](./assets/44.gif)
+![](./assets/144.gif)
 
 * `JVM`给`虚拟机栈`分配内存有一个上限，如果超过了这个上限，就会出现`内存溢出`。
 
@@ -1322,7 +1555,7 @@ public class Test {
 > | Linux            | 1024 KB（1 MB）          |
 > | Windows          | 基于操作系统的默认值     |
 
-![](./assets/45.svg)
+![](./assets/145.svg)
 
 ### 3.5.2 模拟栈内存溢出
 
