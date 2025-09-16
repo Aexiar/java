@@ -72,7 +72,11 @@ const vitePressOptions = defineConfig({
       ],
     },
     plugins: [
-      qrcode(),
+      qrcode({
+        filter: url => {
+          return url.includes('192.168.1.')
+        }
+      }),
       terser(),
       //代码组图标
       (groupIconVitePlugin({
