@@ -1276,14 +1276,17 @@ public class Test {
 ##### 3.4.5.3.1 概述
 
 * 当一个方法开始执行的时候，有两种方式可以退出，如下所示：
-  * :one: 正常完成出口（通过字节码指令 return ）：执行引擎遇到任意一个方法返回的字节码指令，即：方法执行完毕，正常退出。
-  * :two: 异常完成出口（通过异常处理表）：在方法执行过程中遇到异常，并且该异常没有被捕获，即：方法没有执行完毕，非正常退出。
+
+| 方法退出方式                                 | 描述                                                         |
+| -------------------------------------------- | ------------------------------------------------------------ |
+| :one: 正常完成出口（通过字节码指令 return ） | 执行引擎遇到任意一个方法返回的字节码指令，即：方法执行完毕，正常退出。 |
+| :two: 异常完成出口（通过异常处理表）         | 在方法执行过程中遇到异常，并且该异常没有被捕获，即：方法没有执行完毕，非正常退出。 |
 
 * 无论那种退出方式，在方法退出后，都需要返回到该方法被调用的位置。
 
 > [!CAUTION]
 >
-> `正常完成出口`和`异常完成出口`的区别在于：通过异常完成出口退出的不会给它的上层调用者生任何的返回值。
+> `正常完成出口`和`异常完成出口`的区别：通过异常完成出口退出，不会给它的上层调用者产生任何返回值。
 
 
 
@@ -1398,7 +1401,7 @@ public class Test {
         
         // 正常完成出口，对应的指令是 return
         // 不写，也相当于 return;
-        return; // [!code highlight]
+        return; 
     }
 
     private static int methodB() {
@@ -1407,13 +1410,13 @@ public class Test {
 
         // 调用 methodC
         // 没有对 methodC 进行异常捕获，程序会在这里停止执行
-        methodC();  
+        methodC();   // [!code highlight]
 
         // methodC() 方法返回后，从这里继续 
         System.out.println("methodB end ...");
 
         // 正常完成出口，对应的指令是 ireturn
-        return 1;  // [!code highlight]
+        return 1;  
     }
 
     public static double methodC(){
@@ -1422,12 +1425,12 @@ public class Test {
         System.out.println("...");
         
         // 出现异常；但是，没有处理
-        int i = 10 / 0;
+        int i = 10 / 0; // [!code highlight]
 
         System.out.println("methodC end ...");
 
         // 正常完成出口，对应的指令是 dreturn
-        return 1.0; // [!code highlight]
+        return 1.0; 
     }
 
 }
@@ -1458,13 +1461,18 @@ Exception in thread "main" java.lang.ArithmeticException: / by zero
 
 ##### 3.4.5.3.2 返回地址
 
-* `方法返回地址`是`调用者方法中，调用指令的下一条指令的地址`，`被保存在被调用方法的栈帧中`。
+* `方法返回地址`是`调用者方法中调用指令的下一条指令的地址`，`被保存在被调用方法的栈帧中`。
 
 > [!NOTE]
 >
-> * ① 如果是正常退出，调用者的 PC 寄存器的值作为返回地址，即：调用该方法指令的下一条指令的地址。
-> * ② 如果异常退出，返回地址是通过异常处理表来确定的；换言之，此时的栈帧是不会保存这部分信息的。
-> * ③ 当方法执行完，JVM 使用返回地址来设置调用者的 PC，从而继续执行。
+> * ① 一个方法的结束，有两种方式：
+>   * :one: 正常执行完成。
+>   * :two: 非正常退出，即：出现异常，但是没有处理。
+> * ② 无论那种方式退出，在方法退出后都应该返回到该方法被调用的位置：
+>   * :one: 如果是正常退出，调用者的 PC 寄存器的值作为返回地址，即：调用该方法指令的下一条指令的地址。
+>   * :two: 如果异常退出，返回地址是通过异常处理表来确定的；换言之，此时的栈帧是不会保存这部分信息的。
+> * ③ 当方法执行完，JVM 使用返回地址来设置调用者的 PC 寄存器的值，从而继续执行。
+> * ④ 本质上，方法的退出就是当前栈帧出栈的过程。此时，需要恢复上层方法的局部变量表、操作数栈、将返回值压入调用者栈帧的操作数栈、设置 PC 寄存器值等，让调用者的方法继续执行下去。
 
 
 
@@ -1473,8 +1481,6 @@ Exception in thread "main" java.lang.ArithmeticException: / by zero
 ::: code-group
 
 ```java [Test.java]
-package com.github;
-
 public class Test {
     public static void main(String[] args) {
         System.out.println("Step 1");
@@ -1514,15 +1520,11 @@ public static void foo();
      8: return                 // ← 执行 return，触发“返回操作”
 ```
 
+```md:img [cmd 控制台]
+![](./assets/46.gif)
+```
+
 :::
-
-
-
-
-
-
-
-
 
 #### 3.4.5.4 附加信息
 
@@ -1541,7 +1543,7 @@ public static void foo();
 
 * `Java虚拟机栈`中的`栈帧`过多，占用内存超过`栈内存`可以分配的最大大小就会出现`内存溢出`。
 
-![](./assets/144.gif)
+![](./assets/47.gif)
 
 * `JVM`给`虚拟机栈`分配内存有一个上限，如果超过了这个上限，就会出现`内存溢出`。
 
@@ -1555,7 +1557,7 @@ public static void foo();
 > | Linux            | 1024 KB（1 MB）          |
 > | Windows          | 基于操作系统的默认值     |
 
-![](./assets/145.svg)
+![](./assets/48.svg)
 
 ### 3.5.2 模拟栈内存溢出
 
@@ -1594,7 +1596,7 @@ public class Test {
 ```
 
 ```md:img [cmd 控制台]
-![](./assets/46.gif)
+![](./assets/49.gif)
 ```
 
 :::
@@ -1658,7 +1660,7 @@ public class Test {
 ```
 
 ```md:img [cmd 控制台]
-![](./assets/47.gif)
+![](./assets/50.gif)
 ```
 
 :::
@@ -1685,7 +1687,7 @@ public class Test {
 >
 > * ② `本地方法栈`会在栈内存上生成一个栈帧，包含了`局部变量表`、`操作数栈`以及`帧数据`。
 
-![](./assets/48.svg)
+![](./assets/51.svg)
 
 ## 4.2 演示
 
@@ -1724,7 +1726,7 @@ public class Test {
 ```
 
 ```md:img [cmd 控制台]
-![](./assets/49.gif)
+![](./assets/52.gif)
 ```
 
 :::
