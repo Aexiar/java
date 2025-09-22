@@ -810,10 +810,18 @@ class Test {
 ##  5.8 Dalvik VM
 
 - 谷歌开发的，应用于 Android 系统，并在 Android2.2 中提供了 JIT，发展迅猛。
-- Dalvik VM 只能称作虚拟机，而不能称作 “Java虚拟机”，它没有遵循 Java 虚拟机规范，不能直接执行 Java 的 Class 文件
+
+> [!NOTE]
+>
+> Dalvik VM 只能称作虚拟机，而不能称作 “Java虚拟机”，它没有遵循 Java 虚拟机规范，不能直接执行 Java 的 Class 文件。
+
 - `基于寄存器架构，不是 JVM 的栈架构`。
 - 执行的是编译以后的 dex（Dalvik Executable）文件，执行效率比较高。
-- 它执行的 dex（Dalvik Executable）文件可以通过 class 文件转化而来，使用 Java 语法编写应用程序，可以直接使用大部分的 Java API 等。
+
+> [!NOTE]
+>
+> 它执行的 dex（Dalvik Executable）文件可以通过 class 文件转化而来，使用 Java 语法编写应用程序，可以直接使用大部分的 Java API 等。
+
 - Android 5.0 使用支持提前编译（Ahead of Time Compilation，AoT）的 ART VM 替换 Dalvik VM。
 
 ## 5.9 Graal VM
@@ -827,5 +835,13 @@ class Test {
 > 语言包括：Java、Scala、Groovy、Kotlin；C、C++、Javascript、Ruby、Python、R 等。
 
 - 支持不同语言中混用对方的接口和对象，支持这些语言使用已经编写好的本地库文件
-- 工作原理是将这些语言的源代码或源代码编译后的中间格式，通过解释器转换为能被 Graal VM 接受的中间表示。Graal VM 提供 Truffle 工具集快速构建面向一种新语言的解释器。在运行时还能进行即时编译优化，获得比原生编译器更优秀的执行效率。 
+
+> [!NOTE]
+>
+> 工作原理：
+>
+> * ① 将这些语言的源代码或源代码编译后的中间格式，通过解释器转换为能被 Graal VM 接受的中间表示。
+> * ② Graal VM 提供 Truffle 工具集快速构建面向一种新语言的解释器。
+> * ③ 在运行时还能进行即时编译优化，获得比原生编译器更优秀的执行效率。 
+
 - 如果 HotSpot 有一天真的被取代，Graal VM 希望最大；但是，Java 软件生态没有丝毫变化。
