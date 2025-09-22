@@ -759,8 +759,8 @@ class Test {
 
 * 从服务器、桌面到移动端、嵌入式都有应用。
 * 名称中的 HotSpot 指的就是它的热点代码探测技术。
-  * 通过计数器找到最具编译价值代码，触发即时编译或栈上替换。
-  *  通过编译器与解释器协同工作，在最优化的程序响应时间与最佳执行性能中取得平衡。
+  * 通过计数器找到最具编译价值代码，触发`即时编译`或`栈上替换`。
+  *  通过`编译器`与`解释器`协同工作，在`最优化的程序响应时间`与`最佳执行性能`中取得平衡。
 
 ##  5.4 JRockit VM
 
@@ -790,9 +790,14 @@ class Test {
 ## 5.6 Azul VM
 
 * 前面三大“高性能Java虚拟机”使用在`通用`硬件平台上。
+
+> [!NOTE]
+>
+> 指的是 HotSpot、JRockit  和 J9 。
+
 * 这里 Azul VM 和 BEA Liquid VM 是与`特定`硬件平台绑定、软硬件配合的专有虚拟机，高性能 Java 虚拟机中的战斗机。
 * Azul VM 是 Azul Systems 公司在 HotSpot 基础上进行大量改进，运行于 Azul Systems 公司的专有硬件 Vega 系统上的 Java 虚拟机。
-* 每个 Azul VM 实例都可以管理至少数十个 CPU 和数百 GB 内存的硬件资源，并提供在巨大内存范围内实现可控的 GC 时间的垃圾收集器、专有硬件优化的线程调度等优秀特性。
+* `每个 Azul VM 实例都可以管理至少数十个 CPU 和数百 GB 内存的硬件资源，并提供在巨大内存范围内实现可控的 GC 时间的垃圾收集器、专有硬件优化的线程调度等优秀特性`。
 * 2010 年，Azul Systems 公司开始从硬件转向软件，发布了自己的 Zing JVM，可以在通用 x86 平台上提供接近于 Vega 系统的特性。
 
 ## 5.7 Micorsoft JVM
@@ -806,7 +811,7 @@ class Test {
 
 - 谷歌开发的，应用于 Android 系统，并在 Android2.2 中提供了 JIT，发展迅猛。
 - Dalvik VM 只能称作虚拟机，而不能称作 “Java虚拟机”，它没有遵循 Java 虚拟机规范，不能直接执行 Java 的 Class 文件
-- 基于寄存器架构，不是 JVM 的栈架构。
+- `基于寄存器架构，不是 JVM 的栈架构`。
 - 执行的是编译以后的 dex（Dalvik Executable）文件，执行效率比较高。
 - 它执行的 dex（Dalvik Executable）文件可以通过 class 文件转化而来，使用 Java 语法编写应用程序，可以直接使用大部分的 Java API 等。
 - Android 5.0 使用支持提前编译（Ahead of Time Compilation，AoT）的 ART VM 替换 Dalvik VM。
@@ -814,7 +819,7 @@ class Test {
 ## 5.9 Graal VM
 
 - 2018 年 4 月，Oracle Labs 公开了 Graal VM，号称 "Run Programs Faster Anywhere"，野心勃勃。
-- 与 1995 年 Java 的”write once，run anywhere" 遥相呼应。
+- 与 1995 年 Java 的 ”write once，run anywhere" 遥相呼应。
 - Graal VM 在 HotSpot VM 基础上增强而成的跨语言全栈虚拟机，可以作为“任何语言” 的运行平台使用。
 
 > [!NOTE]
