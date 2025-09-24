@@ -1901,7 +1901,7 @@ sc -d org.apache.commons.io.FileUtils
 ```mermaid
 graph TD
     A[启动类加载器<br/>Bootstrap ClassLoader<br/>虚拟机底层实现] --> B[扩展类加载器<br/>Extension ClassLoader<br/>Java语言实现]
-    B --> C[应用程序类加载器<br/>Application ClassLoader<br/>系统类加载器<br/>Java语言实现]
+    B --> C[应用程序类加载器<br/>Application ClassLoader<br/>Java语言实现]
     C --> D[自定义类加载器1<br/>Custom ClassLoader 1<br/>Java语言实现]
     C --> E[自定义类加载器2<br/>Custom ClassLoader 2<br/>Java语言实现]
     C --> F[自定义类加载器N<br/>Custom ClassLoader N<br/>Java语言实现]
