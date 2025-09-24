@@ -2788,10 +2788,6 @@ public class CustomClassLoader extends ClassLoader {
 
 ::: code-group
 
-```md:img [项目结构]
-![](./assets/139.png)
-```
-
 ```xml [Maven(spi-demo 中的 pom.xml)]
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -2871,6 +2867,10 @@ public class CustomClassLoader extends ClassLoader {
     </build>
 
 </project>
+```
+
+```md:img [项目结构]
+![](./assets/139.png)
 ```
 
 :::
