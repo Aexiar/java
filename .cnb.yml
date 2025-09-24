@@ -8,7 +8,7 @@ master:
             npm install -g pnpm
             pnpm config set shamefully-hoist true
             pnpm config set public-hoist-pattern *
-            pnpm install
+            pnpm install --no-frozen-lockfile
             pnpm run docs:build
         - name: "🚀 部署到 Pages"
           image: node:24
