@@ -114,6 +114,7 @@ const vitePressOptions = defineConfig({
           'log': localIconLoader(import.meta.url, '../../public/iconify/log.svg'),
           '日志': localIconLoader(import.meta.url, '../../public/iconify/log.svg'),
           'linux': localIconLoader(import.meta.url, '../../public/iconify/linux.svg'),
+          'Linux': localIconLoader(import.meta.url, '../../public/iconify/linux.svg'),
           'windows': localIconLoader(import.meta.url, '../../public/iconify/windows.svg'),
           'Windows': localIconLoader(import.meta.url, '../../public/iconify/windows.svg'),
           'sql': 'vscode-icons:file-type-sql'
