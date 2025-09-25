@@ -1556,8 +1556,32 @@ public static void foo();
 > | ---------------- | ------------------------ |
 > | Linux            | 1024 KB（1 MB）          |
 > | Windows          | 基于操作系统的默认值     |
+> * ③《Java 虚拟机规范》并未强制要求栈必须是固定大小，它允许实现支持动态扩展或收缩。
+> * ④ HotSpot 选择使用固定大小的栈，出于性能和实现简单性的考虑，即：HotSpot JVM 的栈在运行时是“固定大小”的（一旦线程创建，其栈空间就分配好了，不会自动增长）。
+>   * 如果方法调用深度超过栈容量，会抛出 **`StackOverflowError`**。
+>   * 如果系统无法为新线程分配足够的栈空间（受 `-Xss` 和系统内存限制），会抛出 **`OutOfMemoryError: unable to create new native thread`**。
 
 ![](./assets/48.svg)
+
+
+
+* 示例：查询默认的栈大小
+
+::: code-group
+
+```bash
+java -XX:+PrintFlagsFinal -version | grep ThreadStackSize
+```
+
+```md:img [Linux]
+![](./assets/53.png)
+```
+
+```md:img [windows]
+![](./assets/54.png)
+```
+
+:::
 
 ### 3.5.2 模拟栈内存溢出
 
