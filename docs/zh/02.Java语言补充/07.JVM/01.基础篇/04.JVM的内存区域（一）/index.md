@@ -1577,7 +1577,7 @@ java -XX:+PrintFlagsFinal -version | grep ThreadStackSize
 ![](./assets/53.png)
 ```
 
-```md:img [windows]
+```md:img [Windows]
 ![](./assets/54.png)
 ```
 
