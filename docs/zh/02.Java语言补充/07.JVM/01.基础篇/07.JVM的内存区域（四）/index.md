@@ -1,4 +1,4 @@
-# 第一章：String Table（⭐）
+# 第一章：String Table
 
 ## 1.1 String 的基本特性
 
@@ -265,21 +265,275 @@ public class Test {
 
 ## 1.4 字符串的拼接操作
 
+### 1.4.1 概述
+
+* ① 常量和常量的拼接结果在常量池中，原理是编译期优化。
+* ② 常量池中不会存在相同内容的常量。
+* ③ 只要其中有一个是变量，结果就在堆中，原理是 StringBuilder 。
+* ④ 如果拼接的结果调用了 intern() 方法，则主动将常量池中还没有的字符串对象放入池中，并返回此对象地址。
+
+### 1.4.2 应用示例
+
+* 常量和常量的拼接结果在常量池中，原理是编译期优化。
+
+> [!NOTE]
+>
+> 在编译期生成字节码的时候，就可以看出`常量和常量的拼接结果`在`常量池`中。
 
 
 
+* 示例：
+
+::: code-group
+
+```java [Test.java]
+package com.github;
+
+public class Test {
+    public static void main(String[] args) {
+        String s1 = "a" + "b" + "c"; // 等同于 "abc"
+        String s2 = "abc";
+		
+        System.out.println(s1 == s2); // true
+        System.out.println(s1.equals(s2)); // true
+    }
+}
+```
+
+```txt [字节码指令]
+ 0 ldc #2 <abc>  // 从常量池中加载 "abc"
+ 2 astore_1
+ 3 ldc #2 <abc>  // 从常量池中加载 "abc"
+ 5 astore_2
+ 6 getstatic #3 <java/lang/System.out : Ljava/io/PrintStream;>
+ 9 aload_1
+10 aload_2
+11 if_acmpne 18 (+7)
+14 iconst_1
+15 goto 19 (+4)
+18 iconst_0
+19 invokevirtual #4 <java/io/PrintStream.println : (Z)V>
+22 getstatic #3 <java/lang/System.out : Ljava/io/PrintStream;>
+25 aload_1
+26 aload_2
+27 invokevirtual #5 <java/lang/String.equals : (Ljava/lang/Object;)Z>
+30 invokevirtual #4 <java/io/PrintStream.println : (Z)V>
+33 return
+```
+
+:::
+
+### 1.4.3 应用示例
+
+* 如果拼接符号的前后出现了变量，则相当于在堆空间中 new String()，具体的内容为拼接后的结果。
+
+> [!NOTE]
+>
+> * ① 底层其实是 new StringBuilder().append(xx).append(xxx)....toString(); 
+> * ② 字符串拼接操作底层不一定使用 StringBuilder，如果拼接符号左右两边是字符串常量或者使用 final 修饰的量，则依然是编译期优化，即：非 StringBuilder 的方式。
+
+
+
+* 示例：
+
+::: code-group
+
+```java [Test.java]
+package com.github;
+
+public class Test {
+    public static void main(String[] args) {
+        String s1 = "java";
+        String s2 = "EE";
+
+        String s3 = "javaEE";
+        String s4 = "java" + "EE"; // 编译期优化
+        System.out.println(s3 == s4); // true
+
+        String s5 = s1 + "EE";
+        System.out.println(s3 == s5); // false
+
+        String s6 = "java"+ s2;
+        System.out.println(s3 == s6); // false
+
+        String s7 = s1 + s2;
+        System.out.println(s3 == s7); // false
+    }
+}
+```
+
+```txt [字节码指令]
+  0 ldc #2 <java> // 从常量池中加载 "abc"
+  2 astore_1
+  3 ldc #3 <EE> // 从常量池中加载 "abc"
+  5 astore_2
+  6 ldc #4 <javaEE> // 从常量池中加载 "abc"
+  8 astore_3
+  9 ldc #4 <javaEE> // 从常量池中加载 "abc"
+ 11 astore 4
+ 13 getstatic #5 <java/lang/System.out : Ljava/io/PrintStream;>
+ 16 aload_3
+ 17 aload 4
+ 19 if_acmpne 26 (+7)
+ 22 iconst_1
+ 23 goto 27 (+4)
+ 26 iconst_0
+ 27 invokevirtual #6 <java/io/PrintStream.println : (Z)V>
+ 30 new #7 <java/lang/StringBuilder> // 创建 StringBuilder() 对象
+ 33 dup
+ 34 invokespecial #8 <java/lang/StringBuilder.<init> : ()V>
+ 37 aload_1
+ 38 invokevirtual #9 <java/lang/StringBuilder.append : (Ljava/lang/String;)Ljava/lang/StringBuilder;> // 调用 append() 方法
+ 41 ldc #3 <EE>
+ 43 invokevirtual #9 <java/lang/StringBuilder.append : (Ljava/lang/String;)Ljava/lang/StringBuilder;>
+ 46 invokevirtual #10 <java/lang/StringBuilder.toString : ()Ljava/lang/String;>
+ 49 astore 5
+ 51 getstatic #5 <java/lang/System.out : Ljava/io/PrintStream;>
+ 54 aload_3
+ 55 aload 5
+ 57 if_acmpne 64 (+7)
+ 60 iconst_1
+ 61 goto 65 (+4)
+ 64 iconst_0
+ 65 invokevirtual #6 <java/io/PrintStream.println : (Z)V>
+ 68 new #7 <java/lang/StringBuilder>
+ 71 dup
+ 72 invokespecial #8 <java/lang/StringBuilder.<init> : ()V>
+ 75 ldc #2 <java>
+ 77 invokevirtual #9 <java/lang/StringBuilder.append : (Ljava/lang/String;)Ljava/lang/StringBuilder;>
+ 80 aload_2
+ 81 invokevirtual #9 <java/lang/StringBuilder.append : (Ljava/lang/String;)Ljava/lang/StringBuilder;>
+ 84 invokevirtual #10 <java/lang/StringBuilder.toString : ()Ljava/lang/String;>
+ 87 astore 6
+ 89 getstatic #5 <java/lang/System.out : Ljava/io/PrintStream;>
+ 92 aload_3
+ 93 aload 6
+ 95 if_acmpne 102 (+7)
+ 98 iconst_1
+ 99 goto 103 (+4)
+102 iconst_0
+103 invokevirtual #6 <java/io/PrintStream.println : (Z)V>
+106 new #7 <java/lang/StringBuilder>
+109 dup
+110 invokespecial #8 <java/lang/StringBuilder.<init> : ()V>
+113 aload_1
+114 invokevirtual #9 <java/lang/StringBuilder.append : (Ljava/lang/String;)Ljava/lang/StringBuilder;>
+117 aload_2
+118 invokevirtual #9 <java/lang/StringBuilder.append : (Ljava/lang/String;)Ljava/lang/StringBuilder;>
+121 invokevirtual #10 <java/lang/StringBuilder.toString : ()Ljava/lang/String;>
+124 astore 7
+126 getstatic #5 <java/lang/System.out : Ljava/io/PrintStream;>
+129 aload_3
+130 aload 7
+132 if_acmpne 139 (+7)
+135 iconst_1
+136 goto 140 (+4)
+139 iconst_0
+140 invokevirtual #6 <java/io/PrintStream.println : (Z)V>
+143 return
+
+```
+
+:::
 
 ## 1.5 intern() 的使用
 
+* 如果调用 intern() 方法，会将`字符串对象`尝试放入`字符串常量池`中：
+  * 如果`字符串常量池`中有，则并不会放入，而是返回已有的`字符串常量池`中的`字符串对象地址`。
+  * 如果`字符串常量池`中没有，则会将`对象的引用地址复制一份`，放入`字符串常量池`中，并返回`字符串常量池`中的`引用地址`。
 
 
 
+* 示例：
+
+```java
+package com.github;
+
+public class Test {
+    public static void main(String[] args) {
+        String s1 = "java";
+        String s2 = "EE";
+
+        String s3 = "javaEE";
+
+        String s5 = s1 + "EE";
+        System.out.println(s3 == s5); // false
+        System.out.println(s3 == s5.intern()); // true
+        System.out.println(s3 == (s1+s2).intern()); // true
+    }
+}
+```
+
+## 1.6 面试题
+
+* new String("ab") 创建了几个对象？
+
+
+
+* 示例：
+
+::: code-group
+
+```bash
+2
+```
+
+```java [Test.java]
+package com.github;
+
+public class Test {
+    public static void main(String[] args) {
+        new String("ab");
+    }
+}
+```
+
+```txt [字节码指令]
+ 0 new #2 <java/lang/String> // 在堆中创建对象，并且属性值是 "ab"
+ 3 dup
+ 4 ldc #3 <ab> 从常量池中加载 "ab"
+ 6 invokespecial #4 <java/lang/String.<init> : (Ljava/lang/String;)V>
+ 9 pop
+10 return
+```
+
+:::
 
 ## 1.6 String Table 的垃圾回收
 
+* 由于字符串常量池在 JDK7 之后迁移到了堆中，所以 GC 也会对`字符串常量池`进行垃圾回收。
 
+
+
+* 示例：
+
+::: code-group
+
+```bash
+-Xms15m -Xmx15m -XX:+PrintStringTableStatistics -XX:+PrintGCDetails
+```
+
+```java [Test.java]
+package com.github;
+
+public class Test {
+    public static void main(String[] args) {
+        for (int i = 0; i < 10_1000; i++) {
+            String.valueOf(i).intern();
+        }
+    }
+}
+```
+
+```md:img [cmd 控制台]
+![](./assets/7.gif)
+```
+
+:::
 
 
 
 # 第二章：执行引擎
+
+## 2.1 概述
 
