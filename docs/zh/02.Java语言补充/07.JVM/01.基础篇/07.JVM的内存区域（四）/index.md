@@ -967,31 +967,261 @@ public class Test {
 
 :::
 
-### 2.6.4 热点代码以及探测方式
+### 2.6.4 Java 编译器
+
+* Java 语言的`编译期`其实是一段`不确定`的操作过程，因为它可能是一个`前端编译器`，即：将 `.java` 文件转变为 `.class` 文件的过程。
+* 也可能是指 JVM 的`后端运行时编译期`（JIT 编译器，Just In Time Compiler），即：将`.class` 文件转变为机器码的过程。
+* 还可能是指`静态提前编译器`（AOT 编译器，Ahead Of Time Compiler），即：直接将`.class` 文件机器码的过程（静态编译成一个独立的、平台相关的本地可执行文件）。
+
+> [!NOTE]
+>
+> 目前，AOT 编译器需要先用 `javac` 编译源码，再用 `native-image` 工具进行 AOT 编译。
+
+![](./assets/22.svg)
+
+### 2.6.5 热点代码以及探测方式
+
+#### 2.6.5.1 概述
+
+* 是否需要启动`JIT 编译器`将`字节码`直接编译为对应平台上的`本地机器指令`，则需要根据代码`被调用的频率`而定。
+* 关于哪些需要被编译为本地代码的字节码，我们称之为`热点代码`，JIT 编译器在运行时会针对哪些频繁被调用的`热点代码`做出`深度优化`，将其直接编译为对应平台的本地机器指令，以便提高 Java 程序的执行性能。
+
+#### 2.6.5.2 热点代码
+
+* `一个被多次调用的方法`或者`一个方法体内部循环次数较多的循环体`都可以被称为`热点代码`，都可以使用 JIT 编译器将其编译为本地机器指令。
+* 由于这种`编译方式`发生在`方法的执行过程`中，因此也被称为`栈上替换`（OSR，On Stack Replacement）。
 
 
 
+* 示例：
+
+::: code-group
+
+```java [Test.java]
+package com.github;
+
+public class Test {
+    public static void main(String[] args) throws InterruptedException {
+        long start = System.currentTimeMillis();
+
+        // 这个循环会执行 10 亿次，是典型的热点代码区域
+        long sum = 0;
+        for (int i = 0; i < 1_000_000_000; i++) {
+            sum += compute(i);
+        }
+
+        long end = System.currentTimeMillis();
+        System.out.println("Sum: " + sum);
+        System.out.println("Time: " + (end - start) + " ms");
+    }
+
+    // 这个方法会被频繁调用（10 亿次），成为热点方法
+    public static int compute(int x) {
+        return x * x + 2 * x + 1;
+    }
+
+}
+```
+
+```bash
+# JVM 参数用来打印被 JIT 编译的方法
+-XX:+PrintCompilation 
+```
+
+```md:img [cmd 控制台]
+![](./assets/23.gif)
+```
+
+```txt [日志] {26-28}
+73    2       3       java.lang.Object::<init> (1 bytes)
+73    1       3       java.lang.AbstractStringBuilder::ensureCapacityInternal (27 bytes)
+73    3       3       java.lang.StringBuilder::append (8 bytes)
+73    8       3       java.lang.String::hashCode (55 bytes)
+73    9       3       java.lang.AbstractStringBuilder::append (50 bytes)
+74   10       3       java.lang.CharacterData::of (120 bytes)
+74   11       3       java.lang.CharacterDataLatin1::getProperties (11 bytes)
+74    7       4       java.lang.String::length (6 bytes)
+74    5       4       sun.misc.ASCIICaseInsensitiveComparator::toLower (16 bytes)
+74    6       4       sun.misc.ASCIICaseInsensitiveComparator::isUpper (18 bytes)
+74    4       4       java.lang.String::charAt (29 bytes)
+76   12       3       java.lang.String::equals (81 bytes)
+76   13       3       java.lang.String::lastIndexOf (52 bytes)
+76   14       3       java.lang.StringBuilder::toString (17 bytes)
+76   15       3       java.lang.String::indexOf (70 bytes)
+76   17     n 0       java.lang.System::arraycopy (native)   (static)
+77   18       3       java.lang.String::startsWith (72 bytes)
+77   19       3       java.lang.Math::min (11 bytes)
+77   16       3       java.lang.StringBuilder::<init> (7 bytes)
+77   20       3       java.lang.String::startsWith (7 bytes)
+77   21       1       sun.instrument.TransformerManager::getSnapshotTransformerList (5 bytes)
+77   22       3       java.io.WinNTFileSystem::isSlash (18 bytes)
+77   23       3       java.lang.AbstractStringBuilder::append (29 bytes)
+77   24  s    3       java.lang.StringBuffer::append (13 bytes)
+77   25       3       sun.nio.cs.ext.DoubleByte$Encoder::encodeChar (21 bytes)
+78   26       3       com.github.Test::compute (10 bytes)
+78   27       1       com.github.Test::compute (10 bytes)
+78   26       3       com.github.Test::compute (10 bytes)   made not entrant
+79   28       3       java.lang.String::getChars (62 bytes)
+80   29 %     3       com.github.Test::main @ 9 (95 bytes)
+80   30       3       com.github.Test::main (95 bytes)
+81   33       3       java.lang.String::<init> (82 bytes)
+81   32       3       java.util.BitSet::checkInvariants (111 bytes)
+81   31       3       java.util.BitSet::wordIndex (5 bytes)
+81   34 %     4       com.github.Test::main @ 9 (95 bytes)
+81   35       3       java.lang.String::indexOf (7 bytes)
+82   37     n 0       sun.misc.Unsafe::getObjectVolatile (native)   
+82   36       3       java.util.concurrent.ConcurrentHashMap::tabAt (21 bytes)
+84   29 %     3       com.github.Test::main @ -2 (95 bytes)   made not entrant
+497   34 %     4       com.github.Test::main @ -2 (95 bytes)   made not entrant
+```
+
+:::
+
+#### 2.6.5.3 探测方式
+
+##### 2.6.5.3.1 概述
+
+* 一个方法究竟要`被调用多少次`，或者一个循环体内究竟需要执行`多少次循环`才能达到这个标准，必须需要一个明确的`阈值`，JIT 编译器才会将这些`热点代码`编译为本地机器指令，这里依靠的是`热点探测功能`。
+
+* `目前 HotSpot VM 所采用的热点探测方式是基于计数器的热点探测`。
+* 采用基于计数器的热点探测，HotSpot VM 将会为每个方法都建立 2 个不同类型的计数器，如下所示：
+  * `方法调用计数器`（Invocation Counter）：用于统计方法的调用次数。
+  * `回边计数器`（Back Edge Counter）：用于统计循环体执行的循环次数。
+
+##### 2.6.5.3.2 方法调用计数器
+
+* 方法调用计数器用于统计方法被调用的次数，它的默认阈值在 Client 模式下是 1500 次，在 Server 模式下是 10000 次，超过这个阈值，就会触发 JIT 编译。
+* 这个阈值可以通过虚拟机参数 `-XX:CompileThreshold` 来人为指定，通常没有必要。
+
+::: code-group
+
+```bash
+java -XX:+PrintFlagsFinal -version | grep -i CompileThreshold
+```
+
+```md:img [cmd 控制台]
+![](./assets/24.png)
+```
+
+:::
+
+* 当一个方法被调用的时候，先检查该方法是否存在被 JIT 编译过的版本。如果存在，则优先使用编译后的本地代码来执行。如果不存在已经编译过的版本，则将此方法的调用计数器值 +1 ，然后判断`方法调用计数器和回边计数器的值之和`是否超过了`阈值`。如果超过了阈值，就会向 JIT 提交一个该方法的代码编译请求。
+
+![](./assets/25.svg)
+
+* 如果不做任何设置，`方法调用计数器`统计的并不是方法被调用的绝对次数，而是一个相对的执行频率，即：`一段时间之内该方法被调用的次数`。当超过了`一定的时间限度`，如果方法的调用次数依然不足以让其被提交给 JIT 编译器，那么该方法的`调用计数器`就会被`减少一半`，这个过程称为`方法调用计数器`的`热度衰减`（Counter Decay），而`这段时间`就成为此方法统计的`半衰周期`（Counter Half Life Time）。
+* 进行`热度衰减`的动作是在虚拟机进行`垃圾收集`时顺便进行的，可以使用虚拟机参数 `-XX:-UseCounterDecay` 来关闭热度衰减，让`方法计数器`统计方法调用的绝对次数，这样，只要系统运行时间足够长，绝大部分方法都会被编译成本地代码。
+* 另外，可以使用 `-XX:CounterHalfLifeTime` 参数设置半衰周期的时间，单位是秒。
+
+##### .6.5.3.3 回边计数器
+
+* `回边计数器`是统计一个方法中`循环体代码执行的次数`，在字节码中遇到控制流向跳转的指令称为`回边`（Back Edge），其也是为了触发 OSR 编译。
+
+![](./assets/26.svg)
+
+### 2.6.6 HotSpot VM 中设置程序执行方式
+
+* 默认情况下，HotSpot VM 是采用`解释器`和 `JIT`并存的架构。
+* 程序员可以根据具体的应用场景，通过命令显示地为 JVM 在`运行时`到底是`完全采用解释器`执行，还是`完全采用 JIT` 执行。
+
+```bash
+-Xint: 完全采用解释器模式执行程序
+-Xcomp：完全采用 JIT 模式执行程序；但是，如果 JIT 出现问题，会退出解释器执行
+-Xmixed： 采用解释器 + JIT 混合的模式执行程序
+```
 
 
 
+* 示例：默认情况（混合模式）
+
+::: code-group
+
+```bash
+java -version
+```
+
+```md:img [cmd 控制台]
+![](./assets/27.png)
+```
+
+:::
 
 
 
-### 2.6.5 HotSpot VM 中的 JIT 分类
+* 示例：切换为完全解释器模式
+
+::: code-group
+
+```bash
+java -Xint -version
+```
+
+```md:img [cmd 控制台]
+![](./assets/28.png)
+```
+
+:::
 
 
 
+* 示例：切换为完全 JIT 模式
+
+::: code-group
+
+```bash
+java -Xcomp -version
+```
+
+```md:img [cmd 控制台]
+![](./assets/29.png)
+```
+
+:::
 
 
 
+* 示例：切换为混合模式
 
-### 2.6.6 AOT 编译器
+::: code-group
 
+```bash
+java -Xmixed -version
+```
 
+```md:img [cmd 控制台]
+![](./assets/30.png)
+```
 
+:::
 
+### 2.6.7 HotSpot 中 JIT 的分类
 
+#### 2.6.7.1 概述
 
+* 在 HotSpot VM 中内嵌有两个 JIT 编译器，分别为 Client Compiler 和 Server Compiler，但大多数情况下我们简称为 C1 编译器和 C2 编译器。
+* 开发人员可以通过如下命令显式指定Java虚拟机在运行时到底使用哪一种即时编译器。
 
+```txt
+-client：指定Java虚拟机运行在Client模式下，并使用 c1 编译器
+-server：指定Java虚拟机运行在Server模式下，并使用 c2 编译器。
+```
 
+> [!NOTE]
+>
+> * ① C1 编译器会对字节码进行`简单和可靠的优化，耗时短`，以达到更快的编译速度。
+> * ② C2 编译器进行`耗时较长的优化，以及激进优化`，但优化的代码执行效率更高。
 
+* 需要注意的是，对于 64 位操作系统是不能设置 `-client` 参数的，因为 64 位操作系统模式就是使用的 Server 模式。
+
+![](./assets/31.png)
+
+#### 2.6.7.2 C1 编译器和 C2 编译器不同的优化策略
+
+* `C1 编译器`上主要有`方法内敛`、`去虚拟化`以及`冗余消除`的优化策略。
+  * `方法内联`：将引用的函数代码编译到引用点处，这样可以减少栈帧的生成，减少参数传递以及跳转过程。
+  * `去虚拟化`：对唯一的实现类进行内联。
+  * `冗余消除`：在运行期间把一些不会执行的代码折叠掉。
+* `C2 编译器`的优化主要是在全局层面，逃逸分析是优化的基础。基于逃逸分析在 C2 上有如下几种优化：
+  * `标量替换`：用标量值代替聚合对象的属性值。
+  * `栈上分配`：对于未逃逸的对象分配对象在栈而不是堆。
+  * `同步消除`：清除同步操作，通常指 synchronized 。
