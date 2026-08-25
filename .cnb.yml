@@ -5,7 +5,7 @@ master:
         - name: "🔧 构建当前项目"
           image: node:24
           script: |
-            npm install -g pnpm
+            npm install -g pnpm@10
             pnpm config set shamefully-hoist true
             pnpm config set public-hoist-pattern *
             pnpm install --no-frozen-lockfile
