@@ -1,0 +1,36 @@
+/* A restrained full-page atmosphere using classic Java blue and orange. */
+.is-home-page .Layout {
+    --home-blue-wash: rgba(220, 234, 242, 0.54);
+    --home-orange-wash: rgba(255, 239, 215, 0.42);
+    --home-fade: rgba(255, 255, 255, 0.78);
+    background-color: var(--vp-c-bg);
+    background-image:
+        linear-gradient(to bottom, transparent 52%, var(--home-fade) 84%, var(--vp-c-bg) 100%),
+        linear-gradient(145deg, var(--home-blue-wash) 0%, transparent 38%),
+        linear-gradient(215deg, var(--home-orange-wash) 0%, transparent 42%);
+    background-repeat: no-repeat;
+}
+
+.is-home-page .VPContent,
+.is-home-page .VPHome,
+.is-home-page .VPFooter {
+    background: transparent;
+}
+
+.dark.is-home-page .Layout {
+    --home-blue-wash: rgba(38, 66, 80, 0.38);
+    --home-orange-wash: rgba(104, 61, 18, 0.24);
+    --home-fade: rgba(27, 27, 31, 0.76);
+}
+
+@media (max-width: 768px) {
+    .is-home-page .Layout {
+        --home-blue-wash: rgba(220, 234, 242, 0.42);
+        --home-orange-wash: rgba(255, 239, 215, 0.34);
+    }
+
+    .dark.is-home-page .Layout {
+        --home-blue-wash: rgba(38, 66, 80, 0.3);
+        --home-orange-wash: rgba(104, 61, 18, 0.2);
+    }
+}

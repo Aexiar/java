@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:37
+title: index
+encrypt: false
+permalink: /pages/490bbf
+---
 # 第一章：IO 流体系（⭐）
 
 ## 1.1 概述

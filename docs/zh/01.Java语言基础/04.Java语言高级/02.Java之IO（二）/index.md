@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:36
+title: index
+encrypt: false
+permalink: /pages/95174e
+---
 # 第一章：IO 流（⭐）
 
 ## 1.1 概述

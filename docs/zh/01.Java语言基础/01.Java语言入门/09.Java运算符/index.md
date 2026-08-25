@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:35
+title: index
+encrypt: false
+permalink: /pages/0551ff
+---
 # 第一章：前言
 
 ## 1.1 运算符、表达式和操作数

@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:35
+title: index
+encrypt: false
+permalink: /pages/67b676
+---
 # 第一章：数组的概念
 
 ## 1.1 为什么需要数组？

@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:36
+title: index
+encrypt: false
+permalink: /pages/0fb44b
+---
 > [!IMPORTANT]
 >
 > * ① 在 AI 时代，并不需要`记住`正则表达式的规则，只需要了解一下。

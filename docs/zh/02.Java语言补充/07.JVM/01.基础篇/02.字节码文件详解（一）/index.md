@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:38
+title: index
+encrypt: false
+permalink: /pages/5083d3
+---
 #  第一章：Java 虚拟机的组成
 
 ## 1.1 概述

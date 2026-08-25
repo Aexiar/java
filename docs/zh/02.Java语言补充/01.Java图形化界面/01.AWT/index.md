@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:37
+title: index
+encrypt: false
+permalink: /pages/afa54c
+---
 > [!IMPORTANT]
 >
 > * ① JDK 的版本是 `17` ，IDEA 的版本是 `2024.1+`。

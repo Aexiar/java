@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:35
+title: index
+encrypt: false
+permalink: /pages/6fd2e2
+---
 # 第一章：面向对象的概念
 
 ## 1.1 概述

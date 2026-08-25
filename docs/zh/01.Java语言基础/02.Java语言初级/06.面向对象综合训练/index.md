@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:35
+title: index
+encrypt: false
+permalink: /pages/608bf4
+---
 # 第一章：文字版格斗游戏（回合制）
 
 ## 1.1 简单需求

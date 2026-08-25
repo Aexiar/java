@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:35
+title: index
+encrypt: false
+permalink: /pages/17d7a0
+---
 # 第一章：程序到底是怎么在计算机中运行的？
 
 ## 1.1 回顾冯·诺依曼体系结构

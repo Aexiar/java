@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:38
+title: index
+encrypt: false
+permalink: /pages/81c21b
+---
 #  第一章：垃圾回收
 
 ## 1.1 概述

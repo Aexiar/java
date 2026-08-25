@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:38
+title: index
+encrypt: false
+permalink: /pages/84cbd9
+---
 # 第一章：堆内存
 
 ## 5.1 概述

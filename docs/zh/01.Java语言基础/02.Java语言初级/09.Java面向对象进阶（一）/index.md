@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:35
+title: index
+encrypt: false
+permalink: /pages/62b84a
+---
 # 第一章：static（⭐）
 
 ## 1.1 概述

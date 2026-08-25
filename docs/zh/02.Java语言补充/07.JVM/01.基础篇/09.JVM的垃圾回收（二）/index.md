@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:38
+title: index
+encrypt: false
+permalink: /pages/f2c006
+---
 # 第一章：垃圾回收算法
 
 ## 1.1 核心思想

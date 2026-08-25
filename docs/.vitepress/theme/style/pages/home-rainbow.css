@@ -1,0 +1,80 @@
+@property --java-orange {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #f89820;
+}
+
+@property --java-blue {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #5382a1;
+}
+
+/* Use the classic Java blue and orange brand palette. */
+.is-home-page {
+    --java-orange: #f89820;
+    --java-blue: #5382a1;
+    animation: java-palette 16s ease-in-out infinite alternate;
+}
+
+@keyframes java-palette {
+    0% {
+        --java-orange: #f89820;
+        --java-blue: #5382a1;
+    }
+
+    50% {
+        --java-orange: #ee8f16;
+        --java-blue: #4a7898;
+    }
+
+    100% {
+        --java-orange: #df820d;
+        --java-blue: #426f8e;
+    }
+}
+
+:root {
+    --vp-home-hero-name-color: transparent;
+    --vp-home-hero-name-background: linear-gradient(
+        115deg,
+        var(--java-blue) 8%,
+        var(--java-orange) 88%
+    );
+    --vp-home-hero-image-background-image: linear-gradient(
+        135deg,
+        var(--java-blue) 4%,
+        #e8c866 52%,
+        var(--java-orange) 96%
+    );
+    --vp-home-hero-image-filter: blur(72px);
+}
+
+.VPHero .image-bg {
+    opacity: 0.46;
+    filter: blur(72px) saturate(0.78) !important;
+    transform: translate(-50%, -50%) scale(0.92);
+}
+
+.VPImage.image-src {
+    border-radius: 50%;
+}
+
+.dark .VPHero .image-bg {
+    opacity: 0.54;
+    filter: blur(78px) saturate(0.84) !important;
+}
+
+@media (max-width: 768px) {
+    .VPHero .image-bg {
+        opacity: 0.48;
+        filter: blur(56px) saturate(0.82) !important;
+        transform: translate(-50%, -50%) scale(0.84);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .is-home-page {
+        animation: none;
+    }
+}

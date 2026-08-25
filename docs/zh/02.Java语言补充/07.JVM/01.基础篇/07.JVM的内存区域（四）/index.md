@@ -1,3 +1,9 @@
+---
+date: 2025-10-07 21:18:35
+title: index
+encrypt: false
+permalink: /pages/8c8b5f
+---
 # 第一章：String Table
 
 ## 1.1 String 的基本特性

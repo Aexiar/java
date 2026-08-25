@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:36
+title: index
+encrypt: false
+permalink: /pages/201e0e
+---
 # 第一章：抽象类（⭐）
 
 ## 1.1 概述

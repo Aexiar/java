@@ -14,15 +14,15 @@ lastUpdated: true
 head:
   - - meta
     - name: description
-      content: 许大仙前端、Java、大数据、云原生
+      content: 为知笔记、许大仙前端、Java、大数据、云原生
   - - meta
     - name: keywords
-      content: 许大仙,许大仙的博客
+      content: 许大仙，许大仙的博客
 
 hero:
   name: "Java"
-  text: "大、全、细"
-  tagline: "欢迎来到我的博客🎉"
+  text: "系统、深入、实用"
+  tagline: ""
   image:  # text 和 tagline 区域旁的图片
     src: /logo.svg
     alt: "许大仙"
@@ -38,12 +38,12 @@ hero:
 # 按钮下方的描述
 features:
   - icon: 🧠
-    title: "学习思路"
-    details: "学习思路就这么几条：模仿、遍历、分治、动态规划、……"
+    title: "学习路径"
+    details: "循序渐进梳理核心概念，在理解原理的基础上建立完整的知识脉络。"
   - icon: ✍️
-    title: "学习手法"
-    details: "学习手法就这么几种：缓存、索引、信号/事件、回调/消息循环/dispatcher、……"
+    title: "实践方法"
+    details: "以示例驱动理解，以源码验证认知，在动手实践中掌握常用技术与设计思想。"
   - icon: 🚨
-    title: "注意事项"
-    details: "注意事项就这么几点：边界值、等价类、数据完整性原子性、死锁、空转、……"
+    title: "工程要点"
+    details: "关注边界条件、并发安全、数据一致性与性能，让代码经得起真实场景的检验。"
 ---

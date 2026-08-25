@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:36
+title: index
+encrypt: false
+permalink: /pages/285ed7
+---
 # 第一章：函数式编程
 
 ## 1.1 概述

@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:38
+title: index
+encrypt: false
+permalink: /pages/ad01f6
+---
 #  第一章：运行时数据区
 
 ## 1.1 概述

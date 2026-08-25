@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:35
+title: index
+encrypt: false
+permalink: /pages/252446
+---
 # 第一章：IDEA 介绍
 
 ## 1.1 概述

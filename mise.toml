@@ -1,0 +1,55 @@
+# [tools] - 开发工具版本
+[tools]
+node = "24"
+pnpm = "10"
+
+# [tasks] - 项目任务
+#
+# 常用工作流：
+# 1. 首次拉取项目或依赖发生变化：mise run install
+# 2. 日常写作并实时预览：mise run dev
+# 3. 写完文章、提交前只检查排版：mise run lint:md
+# 4. 确认文章已经写完，需要自动修复排版：mise run format:md
+# 5. 发布前执行清理、安装依赖并验证完整构建：mise run build
+# 6. 在本地查看生产构建结果：mise run preview
+#
+# 注意：format:md 会直接改写 docs 下的全部 Markdown 文件。
+# 不要监听运行，也不要在文章尚未输入完成时运行；执行前应先保存并确认 Git 工作区状态。
+
+[tasks.clean]
+description = "构建产物异常时使用：仅清理 VitePress 构建目录"
+run = "pnpm exec rimraf docs/.vitepress/dist"
+
+[tasks.install]
+description = "首次拉取或依赖配置变化时使用：安装项目依赖"
+run = "pnpm install"
+
+[tasks.build]
+description = "发布前使用：依次完成清理、安装依赖和生产构建"
+depends = ["clean", "install"]
+run = "pnpm run docs:build"
+
+[tasks."format:md"]
+# 运行后应检查 git diff，确认修复结果没有改变原意或破坏特殊 Markdown 语法。
+description = "仅在文章完成后手动使用：修复并改写全部 Markdown 排版"
+run = [
+    "pnpm exec autocorrect --fix docs",
+    "pnpm exec textlint --no-textlintrc --rulesdir .textlint-rules --fix \"docs/**/*.md\"",
+]
+
+[tasks."lint:md"]
+description = "写完文章或提交前使用：检查 Markdown 排版且不修改文件"
+run = [
+    "pnpm exec autocorrect docs",
+    "pnpm exec textlint --no-textlintrc --rulesdir .textlint-rules \"docs/**/*.md\"",
+]
+
+[tasks.dev]
+description = "日常写作时使用：安装依赖后启动开发服务器，不自动格式化 Markdown"
+depends = ["install"]
+run = "pnpm run docs:dev"
+
+[tasks.preview]
+description = "检查最终页面时使用：完成完整构建后启动本地预览"
+depends = ["build"]
+run = "pnpm run docs:preview"

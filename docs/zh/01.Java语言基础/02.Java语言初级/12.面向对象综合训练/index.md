@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:35
+title: index
+encrypt: false
+permalink: /pages/f0ebf1
+---
 # 第一章：问答题
 
 ## 1.1 题目 1

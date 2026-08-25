@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:37
+title: index
+encrypt: false
+permalink: /pages/3bc1b9
+---
 > [!IMPORTANT]
 >
 > * ① 学习过 JDK8 的特性，如：Lambda 表达式和 Stream API 等。

@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:36
+title: index
+encrypt: false
+permalink: /pages/6c7852
+---
 # 第一章：泛型（⭐）
 
 ## 1.1 概述

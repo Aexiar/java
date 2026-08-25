@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:38
+title: index
+encrypt: false
+permalink: /pages/07d6c2
+---
 # 第一章：类的生命周期
 
 ## 1.1 概述

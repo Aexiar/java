@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:35
+title: index
+encrypt: false
+permalink: /pages/3f1228
+---
 # 第一章：环境变量（⭐）
 
 ## 1.1 概述

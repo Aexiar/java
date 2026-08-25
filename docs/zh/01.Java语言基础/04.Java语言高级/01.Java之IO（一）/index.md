@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:36
+title: index
+encrypt: false
+permalink: /pages/9282c0
+---
 # 第一章：前言
 
 ## 1.1 为什么要学习 File 和 IO 流？

@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:35
+title: index
+encrypt: false
+permalink: /pages/1fee54
+---
 > [!IMPORTANT]
 >
 > 本文只会讲解基本数据类型，对于引用数据类型，后文会一一讲解。

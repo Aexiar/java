@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:36
+title: index
+encrypt: false
+permalink: /pages/f4079b
+---
 # 第一章：可变参数（⭐）
 
 ## 1.1 概述

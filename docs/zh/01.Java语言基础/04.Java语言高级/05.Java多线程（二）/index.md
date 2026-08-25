@@ -1,3 +1,9 @@
+---
+date: 2025-09-22 09:05:37
+title: index
+encrypt: false
+permalink: /pages/5f850d
+---
 # 第一章：常见的成员方法（⭐）
 
 ## 1.1 概述
