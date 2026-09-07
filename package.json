@@ -30,6 +30,7 @@
     "textlint": "^15.8.0",
     "textlint-rule-zh-core": "^0.0.3",
     "textlint-util-zh": "^0.0.3",
+    "vite": "6.4.3",
     "vite-plugin-qrcode": "^0.4.1",
     "vitepress": "^1.6.4",
     "vitepress-demo-plugin": "^1.8.0",
@@ -56,6 +57,20 @@
     "vue": "^3.5.41"
   },
   "pnpm": {
+    "overrides": {
+      "@xmldom/xmldom": "0.9.12",
+      "esbuild": "0.25.12",
+      "fast-uri@3": "3.1.6",
+      "less>image-size": "-",
+      "js-yaml@3": "3.15.1",
+      "linkify-it": "5.0.2",
+      "lodash": "4.18.0",
+      "markdown-it": "14.2.0",
+      "mdast-util-to-hast": "13.2.1",
+      "picomatch@4": "4.0.4",
+      "preact": "10.29.8",
+      "vite": "6.4.3"
+    },
     "packageExtensions": {
       "@vitest/browser": {
         "peerDependencies": {

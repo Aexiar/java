@@ -66,8 +66,6 @@ export const viteConfig = {
     ],
     server: { port: 5173, strictPort: false },
     css: {
-        preprocessorOptions: {
-            scss: { api: "modern-compiler" },
-        },
+
     },
 };

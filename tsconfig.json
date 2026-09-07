@@ -12,6 +12,7 @@
     "types": ["node", "vite/client"]
   },
   "include": [
+    "env.d.ts",
     "docs/.vitepress/**/*",
     "docs/**/*.md",
     "docs/**/*.vue",
