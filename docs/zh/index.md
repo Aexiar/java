@@ -3,7 +3,7 @@ layout: home
 home: true
 javaHome: true
 lang: zh-CN
-title: Java 知识笔记
+title: Java知识笔记
 titleTemplate: 为知笔记
 head:
   - - meta
